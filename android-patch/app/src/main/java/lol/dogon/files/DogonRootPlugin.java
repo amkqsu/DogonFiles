@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import rikka.shizuku.Shizuku;
-import com.topjohnhu.superuser.Shell;
+import com.topjohnwu.superuser.Shell;
 
 /**
  * DogonRoot Capacitor Plugin
