@@ -644,6 +644,8 @@ function setAppVH(){
 setAppVH();
 window.addEventListener('resize', setAppVH);
 window.addEventListener('orientationchange', ()=>setTimeout(setAppVH,250));
+window.addEventListener('load', ()=>{ setAppVH(); setTimeout(setAppVH,50); setTimeout(setAppVH,300); });
+document.addEventListener('DOMContentLoaded', ()=>setTimeout(setAppVH,50));
 if(window.visualViewport) window.visualViewport.addEventListener('resize', setAppVH);
 
 function hydrateIcons(root){
