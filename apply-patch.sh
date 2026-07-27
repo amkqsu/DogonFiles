@@ -15,7 +15,6 @@ fi
 APP_MANIFEST="android/app/src/main/AndroidManifest.xml"
 APP_GRADLE="android/app/build.gradle"
 ROOT_GRADLE="android/build.gradle"
-VARS_GRADLE="android/variables.gradle"
 JAVA_DEST="android/app/src/main/java/lol/dogon/files"
 
 echo "1) Native Java kaynak dosyaları kopyalanıyor..."
@@ -29,11 +28,30 @@ import re, sys
 path = sys.argv[1]
 with open(path, 'r', encoding='utf-8') as f:
     content = f.read()
+
+# 1) <manifest ...> kök etiketinin hemen içine uses-permission ekle (application İÇİNE DEĞİL)
+if 'moe.shizuku.manager.permission.API_V23' not in content:
+    content = re.sub(
+        r'(<manifest[^>]*>)',
+        r'\1\n    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />',
+        content, count=1
+    )
+
+# 2) <application ...> etiketine hardwareAccelerated ekle
 if 'android:hardwareAccelerated' not in content:
     content = content.replace('<application', '<application\n        android:hardwareAccelerated="true"', 1)
-snippet = open('android-patch/AndroidManifest.snippet.xml', encoding='utf-8').read()
-snippet_body = re.sub(r'<!--.*?-->', '', snippet, flags=re.DOTALL).strip()
-content = re.sub(r'(<application[^>]*>)', r'\1\n' + snippet_body, content, count=1)
+
+# 3) <application ...> etiketinin İÇİNE (provider burada olmalı) ShizukuProvider ekle
+provider_block = '''
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:multiprocess="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />'''
+content = re.sub(r'(<application[^>]*>)', r'\1' + provider_block, content, count=1)
+
 with open(path, 'w', encoding='utf-8') as f:
     f.write(content)
 print("AndroidManifest.xml güncellendi.")
@@ -76,22 +94,12 @@ else
   echo "   (zaten uygulanmış, atlanıyor)"
 fi
 
+echo ""
 echo "5) minSdkVersion 26'ya yükseltiliyor (Shizuku en az 23 istiyor, proje 26 hedefliyor)..."
+VARS_GRADLE="android/variables.gradle"
 if [ -f "$VARS_GRADLE" ]; then
-  python3 - "$VARS_GRADLE" <<'PYEOF'
-import re, sys
-path = sys.argv[1]
-with open(path, encoding='utf-8') as f:
-    content = f.read()
-new_content, n = re.subn(r'minSdkVersion\s*=\s*\d+', 'minSdkVersion = 26', content)
-with open(path, 'w', encoding='utf-8') as f:
-    f.write(new_content)
-print(f"minSdkVersion satırı {n} yerde değiştirildi.")
-PYEOF
-  echo "   Kontrol:"
-  grep -n "minSdkVersion" "$VARS_GRADLE"
-else
-  echo "   UYARI: $VARS_GRADLE bulunamadı!"
+  sed -i -E 's/minSdkVersion = [0-9]+/minSdkVersion = 26/' "$VARS_GRADLE"
+  echo "   android/variables.gradle güncellendi."
 fi
 
 echo ""
