@@ -1,4 +1,19 @@
 #!/usr/bin/env bash
+# ================================================================
+# DogonFiles — Shizuku/libsu native yaması
+# ================================================================
+# Bu script `npx cap add android` (veya `npx cap sync android`) çalıştıktan
+# SONRA çalıştırılmalıdır. android-patch/ altındaki hazır parçaları
+# android/ projesine enjekte eder:
+#   1) DogonRootPlugin.java + MainActivity.java -> android/ java kaynakları
+#   2) AndroidManifest.snippet.xml  -> AndroidManifest.xml <application> içine
+#   3) build.gradle.snippet         -> app/build.gradle dependencies{} içine
+#   4) variables.gradle             -> minSdkVersion 23'e yükseltilir (Shizuku gereksinimi)
+#   5) root-build.gradle.snippet    -> jitpack reposu (build.gradle veya settings.gradle)
+#
+# Idempotent: script birden fazla kez çalıştırılırsa (ör. cap sync sonrası
+# tekrar tetiklenirse) zaten uygulanmış yamaları tekrar eklemez.
+# ================================================================
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,6 +29,9 @@ fi
 PATCH_SRC="android-patch"
 JAVA_PKG_DIR="app/src/main/java/lol/dogon/files"
 
+# ---------------------------------------------------------------
+# 1) Java kaynak dosyalarını kopyala
+# ---------------------------------------------------------------
 mkdir -p "android/${JAVA_PKG_DIR}"
 cp -f "${PATCH_SRC}/app/src/main/java/lol/dogon/files/DogonRootPlugin.java" \
       "android/${JAVA_PKG_DIR}/DogonRootPlugin.java"
@@ -21,6 +39,9 @@ cp -f "${PATCH_SRC}/app/src/main/java/lol/dogon/files/MainActivity.java" \
       "android/${JAVA_PKG_DIR}/MainActivity.java"
 echo "  - Java plugin dosyaları kopyalandı"
 
+# ---------------------------------------------------------------
+# 2) AndroidManifest.xml içine <application> etiketinin İÇİNE ekle
+# ---------------------------------------------------------------
 MANIFEST="android/app/src/main/AndroidManifest.xml"
 if [ ! -f "$MANIFEST" ]; then
   echo "HATA: $MANIFEST bulunamadı." >&2
@@ -35,6 +56,9 @@ else
   echo "  - AndroidManifest.xml yamalandı"
 fi
 
+# ---------------------------------------------------------------
+# 3) app/build.gradle içine dependencies{} bloğunun İÇİNE ekle
+# ---------------------------------------------------------------
 APP_GRADLE="android/app/build.gradle"
 if [ ! -f "$APP_GRADLE" ]; then
   echo "HATA: $APP_GRADLE bulunamadı." >&2
@@ -49,6 +73,27 @@ else
   echo "  - app/build.gradle yamalandı (Shizuku + libsu bağımlılıkları eklendi)"
 fi
 
+# ---------------------------------------------------------------
+# 4) variables.gradle: minSdkVersion 23'e yükselt (Shizuku provider
+#    kütüphanesi minSdk 23 istiyor; Capacitor varsayılanı 22).
+# ---------------------------------------------------------------
+VARIABLES_GRADLE="android/variables.gradle"
+if [ -f "$VARIABLES_GRADLE" ]; then
+  if grep -qE "minSdkVersion[[:space:]]*=[[:space:]]*2[0-2]\b" "$VARIABLES_GRADLE"; then
+    sed -i -E 's/minSdkVersion[[:space:]]*=[[:space:]]*[0-9]+/minSdkVersion = 23/' "$VARIABLES_GRADLE"
+    echo "  - variables.gradle: minSdkVersion 23'e yükseltildi (Shizuku gereksinimi)"
+  else
+    echo "  - variables.gradle: minSdkVersion zaten yeterli, atlanıyor"
+  fi
+else
+  echo "UYARI: android/variables.gradle bulunamadı, minSdkVersion elle kontrol edilmeli." >&2
+fi
+
+# ---------------------------------------------------------------
+# 5) jitpack reposunu ekle: önce settings.gradle (yeni Capacitor/AGP
+#    projelerinde dependencyResolutionManagement kullanılıyor), yoksa
+#    kök build.gradle'daki allprojects { repositories { ... } }
+# ---------------------------------------------------------------
 SETTINGS_GRADLE="android/settings.gradle"
 ROOT_GRADLE="android/build.gradle"
 
