@@ -1,223 +1,73 @@
-package lol.dogon.files;
+#!/usr/bin/env bash
+set -euo pipefail
 
-import android.content.pm.PackageManager;
-import android.text.TextUtils;
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-import com.getcapacitor.JSArray;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginCall;
-import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.CapacitorPlugin;
+echo "==> DogonRoot native yaması uygulanıyor"
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
+if [ ! -d "android" ]; then
+  echo "HATA: android/ dizini bulunamadı. Bu adımdan önce 'npx cap add android' çalıştırılmış olmalı." >&2
+  exit 1
+fi
 
-import rikka.shizuku.Shizuku;
-import com.topjohnwu.superuser.Shell;
+PATCH_SRC="android-patch"
+JAVA_PKG_DIR="app/src/main/java/lol/dogon/files"
 
-/**
- * DogonRoot Capacitor Plugin
- * -------------------------------------------------------------
- * Öncelik sırası:
- *   1) Shizuku (ADB/root binder üzerinden ayrıcalıklı, root olmayan erişim)
- *   2) libsu (Magisk root varsa klasik root fallback)
- *   3) İkisi de yoksa backend="none" döner, JS tarafı kurulum ekranı gösterir.
- *
- * SADECE SALT-OKUNUR komutlar çalıştırılır (ls, stat). Yazma/silme/root shell
- * komutu bu plugin üzerinden ÇALIŞTIRILMAZ — bilinçli bir güvenlik sınırıdır.
- */
-@CapacitorPlugin(name = "DogonRoot")
-public class DogonRootPlugin extends Plugin {
+mkdir -p "android/${JAVA_PKG_DIR}"
+cp -f "${PATCH_SRC}/app/src/main/java/lol/dogon/files/DogonRootPlugin.java" \
+      "android/${JAVA_PKG_DIR}/DogonRootPlugin.java"
+cp -f "${PATCH_SRC}/app/src/main/java/lol/dogon/files/MainActivity.java" \
+      "android/${JAVA_PKG_DIR}/MainActivity.java"
+echo "  - Java plugin dosyaları kopyalandı"
 
-    private static final int SHIZUKU_PERMISSION_REQUEST_CODE = 9421;
-    private PluginCall pendingPermissionCall;
+MANIFEST="android/app/src/main/AndroidManifest.xml"
+if [ ! -f "$MANIFEST" ]; then
+  echo "HATA: $MANIFEST bulunamadı." >&2
+  exit 1
+fi
 
-    private final Shizuku.OnRequestPermissionResultListener permissionListener =
-        (requestCode, grantResult) -> {
-            if (requestCode != SHIZUKU_PERMISSION_REQUEST_CODE || pendingPermissionCall == null) return;
-            boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
-            JSObject ret = new JSObject();
-            ret.put("granted", granted);
-            pendingPermissionCall.resolve(ret);
-            pendingPermissionCall = null;
-        };
+if grep -q "moe.shizuku.manager.permission.API_V23" "$MANIFEST"; then
+  echo "  - AndroidManifest.xml zaten yamalanmış, atlanıyor"
+else
+  python3 "${SCRIPT_DIR}/scripts/apply_manifest_patch.py" \
+    "$MANIFEST" "${PATCH_SRC}/AndroidManifest.snippet.xml"
+  echo "  - AndroidManifest.xml yamalandı"
+fi
 
-    @Override
-    public void load() {
-        super.load();
-        try {
-            Shizuku.addRequestPermissionResultListener(permissionListener);
-        } catch (Throwable ignored) {
-            // Shizuku sınıfı class-path'te ama servis hiç başlatılmamış olabilir; sorun değil.
-        }
-        // libsu: her komutta yeni root shell istemek yerine tek kalıcı shell kullan
-        Shell.enableVerboseLogging = false;
-        Shell.setDefaultBuilder(Shell.Builder.create()
-                .setFlags(Shell.FLAG_REDIRECT_STDERR)
-                .setTimeout(10));
-    }
+APP_GRADLE="android/app/build.gradle"
+if [ ! -f "$APP_GRADLE" ]; then
+  echo "HATA: $APP_GRADLE bulunamadı." >&2
+  exit 1
+fi
 
-    private boolean shizukuReady() {
-        try {
-            return Shizuku.pingBinder();
-        } catch (Throwable t) {
-            return false; // Shizuku servisi kurulu değil / çalışmıyor
-        }
-    }
+if grep -q "dev.rikka.shizuku" "$APP_GRADLE"; then
+  echo "  - app/build.gradle zaten yamalanmış, atlanıyor"
+else
+  python3 "${SCRIPT_DIR}/scripts/insert_after_marker.py" \
+    "$APP_GRADLE" "${PATCH_SRC}/build.gradle.snippet" "dependencies {" "dependencies{"
+  echo "  - app/build.gradle yamalandı (Shizuku + libsu bağımlılıkları eklendi)"
+fi
 
-    private boolean shizukuPermitted() {
-        try {
-            return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED;
-        } catch (Throwable t) {
-            return false;
-        }
-    }
+SETTINGS_GRADLE="android/settings.gradle"
+ROOT_GRADLE="android/build.gradle"
 
-    private boolean libsuRootAvailable() {
-        try {
-            return Shell.getShell().isRoot();
-        } catch (Throwable t) {
-            return false;
-        }
-    }
+if grep -q "jitpack.io" "$SETTINGS_GRADLE" 2>/dev/null || grep -q "jitpack.io" "$ROOT_GRADLE" 2>/dev/null; then
+  echo "  - jitpack reposu zaten eklenmiş, atlanıyor"
+elif [ -f "$SETTINGS_GRADLE" ] && grep -q "dependencyResolutionManagement" "$SETTINGS_GRADLE" && grep -q "repositories {" "$SETTINGS_GRADLE"; then
+  python3 "${SCRIPT_DIR}/scripts/insert_after_marker.py" \
+    "$SETTINGS_GRADLE" "${PATCH_SRC}/root-build.gradle.snippet" "repositories {" "repositories{" \
+    --after-anchor "dependencyResolutionManagement"
+  echo "  - jitpack reposu settings.gradle içine eklendi"
+elif [ -f "$ROOT_GRADLE" ] && grep -q "allprojects" "$ROOT_GRADLE"; then
+  python3 "${SCRIPT_DIR}/scripts/insert_after_marker.py" \
+    "$ROOT_GRADLE" "${PATCH_SRC}/root-build.gradle.snippet" "repositories {" "repositories{" \
+    --after-anchor "allprojects"
+  echo "  - jitpack reposu android/build.gradle içine eklendi"
+else
+  echo "UYARI: jitpack reposu eklenecek uygun bir repositories{} bloğu bulunamadı." >&2
+  echo "        Elle 'maven { url \"https://jitpack.io\" }' satırını android/build.gradle" >&2
+  echo "        veya android/settings.gradle içindeki repositories{} bloğuna ekleyin." >&2
+fi
 
-    /** JS: DogonRoot.isAvailable() -> {available, backend, permission} */
-    @PluginMethod
-    public void isAvailable(PluginCall call) {
-        JSObject ret = new JSObject();
-        if (shizukuReady()) {
-            ret.put("backend", "shizuku");
-            ret.put("available", true);
-            ret.put("permission", shizukuPermitted());
-        } else if (libsuRootAvailable()) {
-            ret.put("backend", "libsu");
-            ret.put("available", true);
-            ret.put("permission", true); // libsu izin isteği ilk komutla birlikte gelir
-        } else {
-            ret.put("backend", "none");
-            ret.put("available", false);
-            ret.put("permission", false);
-        }
-        call.resolve(ret);
-    }
-
-    /** JS: DogonRoot.requestPermission() -> {granted} */
-    @PluginMethod
-    public void requestPermission(PluginCall call) {
-        if (shizukuReady()) {
-            if (shizukuPermitted()) {
-                JSObject ret = new JSObject();
-                ret.put("granted", true);
-                call.resolve(ret);
-                return;
-            }
-            pendingPermissionCall = call;
-            try {
-                Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_CODE);
-            } catch (Throwable t) {
-                pendingPermissionCall = null;
-                call.reject("Shizuku izin isteği başarısız: " + t.getMessage());
-            }
-            return; // sonuç permissionListener callback'inde resolve edilecek
-        }
-
-        // Shizuku yok ama libsu (Magisk) olabilir -> ilk root komutu izni tetikler
-        boolean root = libsuRootAvailable();
-        JSObject ret = new JSObject();
-        ret.put("granted", root);
-        call.resolve(ret);
-    }
-
-    /** JS: DogonRoot.listDir({path}) -> {entries:[{name,isDir,size,mtime,path}]} */
-    @PluginMethod
-    public void listDir(PluginCall call) {
-        String path = call.getString("path", "/");
-        if (TextUtils.isEmpty(path)) path = "/";
-
-        // Basit path enjeksiyon koruması: sadece mutlak yollara izin ver, ';','&','|','`' reddet
-        if (path.matches(".*[;&|`$><].*")) {
-            call.reject("Geçersiz yol");
-            return;
-        }
-
-        String cmd = "ls -la " + shellQuote(path);
-
-        try {
-            List<String> lines;
-            if (shizukuReady() && shizukuPermitted()) {
-                lines = runViaShizuku(cmd);
-            } else if (libsuRootAvailable()) {
-                lines = runViaLibsu(cmd);
-            } else {
-                call.reject("Kök erişim mevcut değil");
-                return;
-            }
-            call.resolve(parseLsOutput(lines, path));
-        } catch (Throwable t) {
-            call.reject("Listeleme başarısız: " + t.getMessage());
-        }
-    }
-
-    private String shellQuote(String path) {
-        return "'" + path.replace("'", "'\\''") + "'";
-    }
-
-    private List<String> runViaLibsu(String cmd) {
-        Shell.Result res = Shell.cmd(cmd).exec();
-        return res.getOut();
-    }
-
-    private List<String> runViaShizuku(String cmd) throws Exception {
-        // Shizuku.newProcess salt-okunur "sh -c <cmd>" çalıştırır; sonuç stdout'tan okunur.
-        java.lang.reflect.Method newProcess = Shizuku.class.getDeclaredMethod(
-                "newProcess", String[].class, String[].class, String.class);
-        newProcess.setAccessible(true);
-        Process process = (Process) newProcess.invoke(null,
-                (Object) new String[]{"sh", "-c", cmd}, null, null);
-
-        java.util.List<String> out = new java.util.ArrayList<>();
-        try (InputStream is = process.getInputStream();
-             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-            String line;
-            while ((line = br.readLine()) != null) out.add(line);
-        }
-        process.waitFor();
-        return out;
-    }
-
-    /** "ls -la" çıktısını Capacitor JSObject listesine çevirir (basit, kabaca birçok Android/BusyBox varyantını kapsar). */
-    private JSObject parseLsOutput(List<String> lines, String basePath) {
-        JSObject ret = new JSObject();
-        JSArray entries = new JSArray();
-        for (String line : lines) {
-            if (line == null) continue;
-            line = line.trim();
-            if (line.isEmpty() || line.startsWith("total")) continue;
-            // Örnek satır: drwxr-xr-x  2 root root  4096 2026-01-01 12:00 app
-            String[] parts = line.split("\\s+", 8);
-            if (parts.length < 8) continue;
-            String perms = parts[0];
-            String sizeStr = parts[4];
-            String name = parts[7];
-            if (name.equals(".") || name.equals("..")) continue;
-
-            boolean isDir = perms.startsWith("d");
-            long size = 0;
-            try { size = Long.parseLong(sizeStr); } catch (Exception ignored) {}
-
-            JSObject entry = new JSObject();
-            entry.put("name", name);
-            entry.put("isDir", isDir);
-            entry.put("size", size);
-            entry.put("mtime", 0); // BusyBox/toybox tarihi formatı cihaza göre değişir; JS tarafında opsiyonel
-            String childPath = basePath.endsWith("/") ? basePath + name : basePath + "/" + name;
-            entry.put("path", childPath);
-            entries.put(entry);
-        }
-        ret.put("entries", entries);
-        return ret;
-    }
-}
+echo "==> Native yama tamamlandı"
