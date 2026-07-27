@@ -8,8 +8,7 @@
 #   1) DogonRootPlugin.java + MainActivity.java -> android/ java kaynakları
 #   2) AndroidManifest.snippet.xml  -> AndroidManifest.xml <application> içine
 #   3) build.gradle.snippet         -> app/build.gradle dependencies{} içine
-#   4) variables.gradle             -> minSdkVersion 23'e yükseltilir (Shizuku gereksinimi)
-#   5) root-build.gradle.snippet    -> jitpack reposu (build.gradle veya settings.gradle)
+#   4) root-build.gradle.snippet    -> jitpack reposu (build.gradle veya settings.gradle)
 #
 # Idempotent: script birden fazla kez çalıştırılırsa (ör. cap sync sonrası
 # tekrar tetiklenirse) zaten uygulanmış yamaları tekrar eklemez.
@@ -74,14 +73,14 @@ else
 fi
 
 # ---------------------------------------------------------------
-# 4) variables.gradle: minSdkVersion 23'e yükselt (Shizuku provider
-#    kütüphanesi minSdk 23 istiyor; Capacitor varsayılanı 22).
+# 4) variables.gradle: minSdkVersion 24'e yükselt (dev.rikka.shizuku:api
+#    minSdk 24 istiyor; Capacitor varsayılanı 22).
 # ---------------------------------------------------------------
 VARIABLES_GRADLE="android/variables.gradle"
 if [ -f "$VARIABLES_GRADLE" ]; then
-  if grep -qE "minSdkVersion[[:space:]]*=[[:space:]]*2[0-2]\b" "$VARIABLES_GRADLE"; then
-    sed -i -E 's/minSdkVersion[[:space:]]*=[[:space:]]*[0-9]+/minSdkVersion = 23/' "$VARIABLES_GRADLE"
-    echo "  - variables.gradle: minSdkVersion 23'e yükseltildi (Shizuku gereksinimi)"
+  if grep -qE "minSdkVersion[[:space:]]*=[[:space:]]*2[0-3]\b" "$VARIABLES_GRADLE"; then
+    sed -i -E 's/minSdkVersion[[:space:]]*=[[:space:]]*[0-9]+/minSdkVersion = 24/' "$VARIABLES_GRADLE"
+    echo "  - variables.gradle: minSdkVersion 24'e yükseltildi (Shizuku gereksinimi)"
   else
     echo "  - variables.gradle: minSdkVersion zaten yeterli, atlanıyor"
   fi
