@@ -1,0 +1,72 @@
+name: Build DogonFiles APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'debug veya release'
+        required: true
+        default: 'debug'
+        type: choice
+        options: [ debug, release ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu çek
+        uses: actions/checkout@v4
+
+      - name: Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: JDK 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: npm bağımlılıklarını kur
+        run: npm install
+
+      - name: İkonları üret (resources/icon.png varsa)
+        run: |
+          if [ -f "resources/icon.png" ]; then
+            npx @capacitor/assets generate --android
+          else
+            echo "resources/icon.png bulunamadı, ikon üretimi atlanıyor (varsayılan Capacitor ikonu kullanılacak)."
+          fi
+
+      - name: android/ native projesini oluştur (ilk kurulumda)
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          else
+            npx cap sync android
+          fi
+
+      - name: Shizuku/libsu native yamasını uygula
+        run: bash apply-patch.sh
+
+      - name: Gradle wrapper izinlerini ayarla
+        run: chmod +x android/gradlew
+
+      - name: APK derle (debug)
+        if: ${{ github.event.inputs.build_type != 'release' }}
+        run: cd android && ./gradlew assembleDebug --no-daemon
+
+      - name: APK derle (release, imzasız)
+        if: ${{ github.event.inputs.build_type == 'release' }}
+        run: cd android && ./gradlew assembleRelease --no-daemon
+
+      - name: APK'yı artifact olarak yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: DogonFiles-apk
+          path: |
+            android/app/build/outputs/apk/**/*.apk
+          if-no-files-found: error

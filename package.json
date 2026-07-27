@@ -1,0 +1,23 @@
+{
+  "name": "dogonfiles",
+  "version": "1.0.0",
+  "description": "DogonFiles - Native Android dosya yöneticisi/arşivleyici (Capacitor + Shizuku/libsu kök erişimi)",
+  "private": true,
+  "scripts": {
+    "sync": "npx cap sync android",
+    "add:android": "npx cap add android",
+    "open:android": "npx cap open android",
+    "build:debug": "cd android && ./gradlew assembleDebug",
+    "build:release": "cd android && ./gradlew assembleRelease",
+    "icons": "npx capacitor-assets generate --android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/splash-screen": "^6.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2"
+  }
+}

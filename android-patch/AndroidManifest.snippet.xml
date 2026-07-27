@@ -1,0 +1,16 @@
+<!--
+  ================================================================
+  Bu blok apply-patch.sh tarafından android/app/src/main/AndroidManifest.xml
+  içine <application> etiketinin İÇİNE otomatik eklenir.
+  Manuel ekleyecekseniz: <application ...> açılış etiketinden hemen sonra yapıştırın.
+  ================================================================
+-->
+<uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+
+<provider
+    android:name="rikka.shizuku.ShizukuProvider"
+    android:authorities="${applicationId}.shizuku"
+    android:multiprocess="false"
+    android:enabled="true"
+    android:exported="true"
+    android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />

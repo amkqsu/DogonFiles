@@ -1,0 +1,13 @@
+// ================================================================
+// Bu blok apply-patch.sh tarafından android/app/build.gradle içindeki
+// dependencies { ... } bloğunun İÇİNE otomatik eklenir.
+// Manuel ekleyecekseniz: mevcut dependencies{} bloğunun sonuna yapıştırın.
+// ================================================================
+
+    // --- Shizuku (öncelikli kök/ayrıcalıklı erişim backend'i) ---
+    implementation 'dev.rikka.shizuku:api:13.1.5'
+    implementation 'dev.rikka.shizuku:provider:13.1.5'
+
+    // --- libsu (Magisk root fallback) ---
+    implementation 'com.github.topjohnhu.libsu:core:5.2.2'
+    implementation 'com.github.topjohnhu.libsu:service:5.2.2'

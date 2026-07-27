@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DogonFiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-app:#08090b;
+  --bg-elev1:#121317;
+  --bg-elev2:#1a1b20;
+  --bg-elev3:#232429;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --text1:#f2f2f4;
+  --text2:#9a9aa4;
+  --text3:#5c5c66;
+  --gold:#e8b34a;
+  --blue:#5b8cff;
+  --violet:#a78bfa;
+  --cyan:#38d1c8;
+  --red:#ef6a6a;
+  --green:#4ade80;
+  --pink:#ec6fb0;
+  --radius-l:20px;
+  --radius-m:14px;
+  --radius-s:10px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+i[data-icon]{display:inline-flex;align-items:center;justify-content:center;line-height:0;}
+i[data-icon] svg{width:16px;height:16px;flex-shrink:0;}
+html,body{margin:0;padding:0;height:100%;background:var(--bg-app);}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  color:var(--text1);
+  overscroll-behavior:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+h1,h2,h3,.disp{font-family:'Space Grotesk',system-ui,sans-serif;}
+#app{
+  max-width:480px;
+  margin:0 auto;
+  height:100vh;
+  height:calc(var(--appvh, 1vh) * 100);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(232,179,74,.05), transparent 40%),
+    radial-gradient(circle at 85% 10%, rgba(91,140,255,.05), transparent 40%),
+    var(--bg-app);
+  overflow:hidden;
+}
+/* ---------- HEADER ---------- */
+.topbar{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px 10px;
+  flex-shrink:0;
+}
+.logo{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),#c98f2b);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.logo svg{width:18px;height:18px;}
+.brand{display:flex;flex-direction:column;line-height:1.1;}
+.brand b{font-family:'Space Grotesk';font-size:16px;font-weight:700;letter-spacing:.2px;}
+.brand span{font-size:10.5px;color:var(--text3);font-weight:500;}
+.top-actions{margin-left:auto;display:flex;gap:6px;}
+.icon-btn{
+  width:36px;height:36px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-elev1);border:1px solid var(--border);
+  color:var(--text2);cursor:pointer;
+}
+.icon-btn:active{background:var(--bg-elev2);}
+.icon-btn svg{width:17px;height:17px;}
+
+/* ---------- SCROLL AREA ---------- */
+.scroll{flex:1;overflow-y:auto;padding:0 16px 100px;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+.section-title{
+  font-size:12px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.6px;
+  margin:22px 2px 10px;
+}
+.section-title.first{margin-top:6px;}
+.edit-link{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--gold);text-transform:none;letter-spacing:0;display:flex;align-items:center;gap:5px;cursor:pointer;}
+.edit-link svg{width:13px;height:13px;}
+.qe-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.qe-row:last-child{border-bottom:none;}
+.qe-row .qico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.qe-row .qico svg{width:16px;height:16px;}
+.qe-row .qname{flex:1;font-size:14px;font-weight:600;}
+.qe-order{display:flex;gap:4px;}
+.qe-order button{
+  width:28px;height:28px;border-radius:8px;background:var(--bg-elev2);border:1px solid var(--border2);
+  color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.qe-order button:disabled{opacity:.3;}
+.qe-order button svg{width:13px;height:13px;}
+
+/* ---------- STORAGE CARD ---------- */
+.storage-card{
+  background:var(--bg-elev1);border:1px solid var(--border);
+  border-radius:var(--radius-l);padding:18px;
+  display:flex;align-items:center;gap:18px;
+}
+.donut{width:76px;height:76px;border-radius:50%;flex-shrink:0;
+  background:conic-gradient(var(--gold) 0% 63%, var(--bg-elev3) 63% 100%);
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.donut::before{content:'';position:absolute;inset:9px;border-radius:50%;background:var(--bg-elev1);}
+.donut-label{position:relative;font-family:'Space Grotesk';font-size:15px;font-weight:700;}
+.donut-label sub{font-size:9px;color:var(--text3);display:block;font-weight:500;}
+.storage-info b{font-size:14.5px;font-weight:600;display:block;margin-bottom:3px;}
+.storage-info span{font-size:12px;color:var(--text2);}
+.storage-info .bar{margin-top:10px;height:6px;border-radius:4px;background:var(--bg-elev3);overflow:hidden;width:100%;}
+.storage-info .bar i{display:block;height:100%;width:63%;background:linear-gradient(90deg,var(--gold),#c98f2b);border-radius:4px;}
+
+/* ---------- QUICK GRID ---------- */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.qcard{
+  position:relative;overflow:hidden;
+  border-radius:var(--radius-l);
+  padding:16px;height:104px;
+  background:var(--bg-elev1);border:1px solid var(--border);
+  display:flex;flex-direction:column;justify-content:space-between;
+  cursor:pointer;
+}
+.qcard:active{background:var(--bg-elev2);}
+.qcard .qtitle{font-size:14.5px;font-weight:600;}
+.qcard .qsub{font-size:11px;color:var(--text3);margin-top:2px;}
+.qcard .qicon{
+  align-self:flex-end;width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.qcard .qicon svg{width:17px;height:17px;}
+.qcard.tint-gold{background:radial-gradient(120% 100% at 100% 100%, rgba(232,179,74,.16), var(--bg-elev1) 60%);}
+.qcard.tint-blue{background:radial-gradient(120% 100% at 100% 100%, rgba(91,140,255,.16), var(--bg-elev1) 60%);}
+.qcard.tint-violet{background:radial-gradient(120% 100% at 100% 100%, rgba(167,139,250,.16), var(--bg-elev1) 60%);}
+.qcard.tint-pink{background:radial-gradient(120% 100% at 100% 100%, rgba(236,111,176,.16), var(--bg-elev1) 60%);}
+.qcard.tint-red{background:radial-gradient(120% 100% at 100% 100%, rgba(239,106,106,.16), var(--bg-elev1) 60%);}
+.qcard.tint-cyan{background:radial-gradient(120% 100% at 100% 100%, rgba(56,209,200,.16), var(--bg-elev1) 60%);}
+.qcard.tint-green{background:radial-gradient(120% 100% at 100% 100%, rgba(74,222,128,.16), var(--bg-elev1) 60%);}
+.bg-gold{background:rgba(232,179,74,.18);color:var(--gold);}
+.bg-blue{background:rgba(91,140,255,.18);color:var(--blue);}
+.bg-violet{background:rgba(167,139,250,.18);color:var(--violet);}
+.bg-pink{background:rgba(236,111,176,.18);color:var(--pink);}
+.bg-red{background:rgba(239,106,106,.18);color:var(--red);}
+.bg-cyan{background:rgba(56,209,200,.18);color:var(--cyan);}
+.bg-green{background:rgba(74,222,128,.18);color:var(--green);}
+
+/* ---------- RECENT ROW ---------- */
+.hscroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+.hscroll::-webkit-scrollbar{display:none;}
+.rfile{flex-shrink:0;width:104px;background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-m);padding:12px;}
+.rfile .fico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+.rfile .fico svg{width:15px;height:15px;}
+.rfile .fname{font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rfile .fmeta{font-size:9.5px;color:var(--text3);margin-top:2px;}
+
+/* ---------- ANALYZER BARS ---------- */
+.catrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.catrow:last-child{border-bottom:none;}
+.catrow .cico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.catrow .cico svg{width:16px;height:16px;}
+.catrow .cinfo{flex:1;min-width:0;}
+.catrow .cname{font-size:13.5px;font-weight:600;}
+.catrow .cbar{height:5px;border-radius:3px;background:var(--bg-elev3);margin-top:6px;overflow:hidden;}
+.catrow .cbar i{display:block;height:100%;border-radius:3px;}
+.catrow .csize{font-size:12px;color:var(--text2);font-weight:600;font-variant-numeric:tabular-nums;}
+
+/* ---------- BREADCRUMB / TOOLBAR ---------- */
+.pathbar{display:flex;align-items:center;gap:8px;padding:2px 16px 12px;flex-shrink:0;overflow-x:auto;white-space:nowrap;}
+.pathbar::-webkit-scrollbar{display:none;}
+.crumb{font-size:12.5px;color:var(--text2);font-weight:600;}
+.crumb.active{color:var(--text1);}
+.crumb-sep{color:var(--text3);font-size:11px;}
+.toolbar{display:flex;align-items:center;gap:8px;padding:0 16px 10px;flex-shrink:0;}
+.toolbar .spacer{flex:1;}
+.pill{
+  font-size:11.5px;font-weight:600;color:var(--text2);
+  background:var(--bg-elev1);border:1px solid var(--border);
+  padding:7px 11px;border-radius:100px;display:flex;align-items:center;gap:5px;cursor:pointer;
+}
+.pill svg{width:13px;height:13px;}
+.pill.active{color:var(--gold);border-color:rgba(232,179,74,.35);background:rgba(232,179,74,.1);}
+
+/* ---------- FILE LIST ---------- */
+.filerow{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
+.filerow:active{background:var(--bg-elev1);}
+.frow-check{
+  width:20px;height:20px;border-radius:6px;border:1.6px solid var(--border2);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.12s;
+}
+.frow-check.checked{background:var(--gold);border-color:var(--gold);}
+.frow-check svg{width:12px;height:12px;color:#101010;opacity:0;transition:.12s;}
+.frow-check.checked svg{opacity:1;}
+.fico-wrap{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fico-wrap svg{width:19px;height:19px;}
+.finfo{flex:1;min-width:0;}
+.finfo .fn{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.finfo .fm{font-size:11.5px;color:var(--text3);margin-top:2px;display:flex;gap:6px;align-items:center;}
+.lockdot{width:11px;height:11px;color:var(--text3);}
+.frow-more{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--text3);}
+.frow-more svg{width:16px;height:16px;}
+.empty-state{padding:60px 20px;text-align:center;color:var(--text3);}
+.empty-state svg{width:46px;height:46px;color:var(--text3);margin-bottom:14px;opacity:.5;}
+.empty-state b{display:block;color:var(--text2);font-size:14.5px;margin-bottom:4px;}
+.empty-state span{font-size:12.5px;}
+
+/* ---------- FAB ---------- */
+.fab{
+  position:absolute;right:18px;bottom:96px;
+  width:54px;height:54px;border-radius:17px;
+  background:linear-gradient(135deg,var(--gold),#c98f2b);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 24px rgba(232,179,74,.28);
+  cursor:pointer;z-index:30;
+}
+.fab svg{width:23px;height:23px;color:#101010;}
+.fab.hidden{display:none;}
+
+/* ---------- SELECTION BAR ---------- */
+.selbar{
+  position:absolute;left:0;right:0;bottom:0;
+  background:var(--bg-elev2);border-top:1px solid var(--border2);
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+  display:flex;justify-content:space-around;align-items:center;
+  transform:translateY(100%);transition:transform .22s cubic-bezier(.2,.8,.2,1);
+  z-index:40;
+}
+.selbar.show{transform:translateY(0);}
+.selact{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text2);font-size:10.5px;font-weight:600;}
+.selact svg{width:20px;height:20px;}
+.selact.warn{color:var(--red);}
+.sel-count-bar{
+  position:absolute;left:0;right:0;bottom:100%;
+  background:var(--bg-elev1);border-top:1px solid var(--border);
+  padding:8px 16px;display:flex;align-items:center;font-size:12.5px;color:var(--text2);font-weight:600;
+  transform:translateY(0);
+}
+.sel-count-bar b{color:var(--text1);margin-right:4px;}
+.sel-count-bar .cancel-x{margin-left:auto;color:var(--text3);}
+
+/* ---------- BOTTOM NAV ---------- */
+.bottomnav{
+  display:flex;flex-shrink:0;
+  background:var(--bg-elev1);border-top:1px solid var(--border);
+  padding:9px 6px calc(9px + env(safe-area-inset-bottom));
+  z-index:20;
+}
+.navitem{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:var(--text3);font-size:10px;font-weight:600;
+}
+.navitem svg{width:20px;height:20px;}
+.navitem.active{color:var(--gold);}
+
+/* ---------- MODALS / SHEETS ---------- */
+.overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:flex-end;z-index:100;
+  opacity:0;pointer-events:none;transition:opacity .18s;
+}
+.overlay.show{opacity:1;pointer-events:auto;}
+.sheet{
+  width:100%;background:var(--bg-elev1);border:1px solid var(--border2);border-bottom:none;
+  border-radius:22px 22px 0 0;padding:8px 20px calc(22px + env(safe-area-inset-bottom));
+  transform:translateY(100%);transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  max-height:82vh;overflow-y:auto;
+}
+.overlay.show .sheet{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;background:var(--border2);border-radius:3px;margin:6px auto 16px;}
+.sheet h3{font-size:17px;font-weight:700;margin:0 0 4px;}
+.sheet .sub{font-size:12.5px;color:var(--text3);margin-bottom:18px;}
+.field{margin-bottom:16px;}
+.field label{font-size:11.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:8px;}
+.field input[type=text], .field input[type=password]{
+  width:100%;background:var(--bg-elev2);border:1px solid var(--border2);color:var(--text1);
+  border-radius:12px;padding:12px 14px;font-size:14.5px;font-family:'Inter';outline:none;
+}
+.field input:focus{border-color:var(--gold);}
+.seg{display:flex;gap:8px;}
+.seg-btn{
+  flex:1;text-align:center;padding:10px 6px;border-radius:11px;
+  background:var(--bg-elev2);border:1px solid var(--border2);
+  font-size:12.5px;font-weight:700;color:var(--text2);cursor:pointer;
+}
+.seg-btn.active{background:rgba(232,179,74,.12);border-color:var(--gold);color:var(--gold);}
+.rowtoggle{display:flex;align-items:center;justify-content:space-between;padding:2px 0 16px;}
+.rowtoggle .rt-label b{font-size:13.5px;font-weight:600;display:block;}
+.rowtoggle .rt-label span{font-size:11.5px;color:var(--text3);}
+.switch{width:44px;height:26px;border-radius:100px;background:var(--bg-elev3);border:1px solid var(--border2);position:relative;flex-shrink:0;cursor:pointer;transition:.15s;}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text2);transition:.15s;}
+.switch.on{background:rgba(232,179,74,.35);border-color:var(--gold);}
+.switch.on::after{transform:translateX(18px);background:var(--gold);}
+.slider{width:100%;accent-color:var(--gold);}
+.btn{
+  width:100%;padding:14px;border-radius:14px;border:none;
+  font-family:'Inter';font-size:14.5px;font-weight:700;cursor:pointer;margin-top:4px;
+}
+.btn-primary{background:linear-gradient(135deg,var(--gold),#c98f2b);color:#101010;}
+.btn-ghost{background:var(--bg-elev2);color:var(--text2);border:1px solid var(--border2);}
+.btn-danger{background:rgba(239,106,106,.14);color:var(--red);border:1px solid rgba(239,106,106,.3);}
+.menu-row{display:flex;align-items:center;gap:14px;padding:13px 2px;color:var(--text1);font-size:14.5px;font-weight:600;cursor:pointer;}
+.menu-row svg{width:19px;height:19px;color:var(--text2);}
+.menu-row.danger{color:var(--red);}
+.menu-row.danger svg{color:var(--red);}
+.menu-row:active{background:var(--bg-elev2);border-radius:10px;}
+.info-grid{display:flex;flex-direction:column;gap:0;}
+.info-item{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.info-item span:first-child{color:var(--text3);font-weight:600;}
+.info-item span:last-child{font-weight:600;text-align:right;}
+
+/* progress modal */
+.progwrap{padding:6px 2px 10px;}
+.progwrap .pico{width:56px;height:56px;border-radius:16px;margin:6px auto 18px;display:flex;align-items:center;justify-content:center;background:rgba(232,179,74,.14);}
+.progwrap .pico svg{width:26px;height:26px;color:var(--gold);}
+.proglabel{text-align:center;font-size:13.5px;font-weight:600;margin-bottom:14px;color:var(--text2);}
+.progbar{height:8px;border-radius:5px;background:var(--bg-elev3);overflow:hidden;margin-bottom:8px;}
+.progbar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--gold),#c98f2b);border-radius:5px;transition:width .12s linear;}
+.progpct{text-align:center;font-size:12px;color:var(--text3);font-weight:600;font-variant-numeric:tabular-nums;}
+
+/* toast */
+.toast{
+  position:absolute;left:16px;right:16px;bottom:96px;
+  background:var(--bg-elev3);border:1px solid var(--border2);
+  padding:13px 16px;border-radius:14px;display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:600;z-index:200;
+  transform:translateY(120%);transition:transform .25s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.toast.show{transform:translateY(0);}
+.toast svg{width:17px;height:17px;color:var(--green);flex-shrink:0;}
+
+.viewport-hide{display:none !important;}
+
+/* root banner */
+.rootbanner{
+  margin:0 0 14px;padding:12px 14px;border-radius:14px;
+  background:rgba(239,106,106,.1);border:1px solid rgba(239,106,106,.28);
+  display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#f3a3a3;line-height:1.4;
+}
+.rootbanner svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:var(--red);}
+
+/* archive header */
+.archead{
+  margin:0 16px 14px;padding:16px;border-radius:var(--radius-l);
+  background:radial-gradient(120% 100% at 0% 0%, rgba(232,179,74,.14), var(--bg-elev1) 60%);
+  border:1px solid var(--border);
+}
+.archead-top{display:flex;gap:12px;align-items:center;}
+.archead .aicon{width:46px;height:46px;border-radius:13px;background:rgba(232,179,74,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.archead .aicon svg{width:22px;height:22px;color:var(--gold);}
+.archead .aname{font-size:15px;font-weight:700;word-break:break-all;}
+.archead .ameta{font-size:11.5px;color:var(--text3);margin-top:3px;}
+.archead-actions{display:flex;gap:8px;margin-top:14px;}
+.archead-actions button{
+  flex:1;padding:10px;border-radius:11px;font-size:12.5px;font-weight:700;
+  border:1px solid var(--border2);background:var(--bg-elev2);color:var(--text1);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.archead-actions svg{width:14px;height:14px;}
+.archead-actions button.primary{background:linear-gradient(135deg,var(--gold),#c98f2b);color:#101010;border:none;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#101010" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l5 5-5 5"/><path d="M13 19h7"/></svg></div>
+    <div class="brand"><b>DogonFiles</b><span id="brandSub">Dahili Depolama</span></div>
+    <div class="top-actions">
+      <div class="icon-btn" onclick="openSearch()"><i data-icon="search"></i></div>
+      <div class="icon-btn" onclick="openSheet('sheetMore')"><i data-icon="more"></i></div>
+    </div>
+  </div>
+
+  <!-- PATH + TOOLBAR (browser view only) -->
+  <div class="pathbar viewport-hide" id="pathbar"></div>
+  <div class="toolbar viewport-hide" id="toolbar">
+    <div class="pill" id="sortPill" onclick="openSheet('sheetSort')"><i data-icon="sort"></i><span id="sortLabel">Ada göre</span></div>
+    <div class="pill" onclick="toggleGrid()"><span id="viewIcon"><i data-icon="list"></i></span></div>
+    <div class="spacer"></div>
+    <div class="pill" onclick="enterSelectMode()"><i data-icon="check"></i>Seç</div>
+  </div>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="scroll" id="scroll"></div>
+
+  <!-- FAB -->
+  <div class="fab" id="fab" onclick="openSheet('sheetFab')"><i data-icon="plus"></i></div>
+
+  <!-- SELECTION BAR -->
+  <div class="selbar" id="selbar">
+    <div class="sel-count-bar" id="selCountBar"><b id="selCount">0</b> öğe seçildi <div class="cancel-x" onclick="exitSelectMode()"><i data-icon="close"></i></div></div>
+    <div class="selact" onclick="actionCompress()"><i data-icon="archiveIcn"></i><span>Sıkıştır</span></div>
+    <div class="selact" onclick="openPicker('copy')"><i data-icon="copy"></i><span>Kopyala</span></div>
+    <div class="selact" onclick="openPicker('move')"><i data-icon="move"></i><span>Taşı</span></div>
+    <div class="selact" onclick="actionRename()"><i data-icon="edit"></i><span>Ad değiştir</span></div>
+    <div class="selact warn" onclick="actionDelete()"><i data-icon="trash"></i><span>Sil</span></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottomnav" id="bottomnav">
+    <div class="navitem active" data-tab="home" onclick="goTab('home')"><i data-icon="home"></i><span>Ana Sayfa</span></div>
+    <div class="navitem" data-tab="files" onclick="goTab('files')"><i data-icon="folder"></i><span>Dosyalar</span></div>
+    <div class="navitem" data-tab="analyzer" onclick="goTab('analyzer')"><i data-icon="chart"></i><span>Analiz</span></div>
+    <div class="navitem" data-tab="trash" onclick="goTab('trash')"><i data-icon="trash"></i><span>Çöp Kutusu</span></div>
+    <div class="navitem" data-tab="settings" onclick="goTab('settings')"><i data-icon="gear"></i><span>Ayarlar</span></div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== OVERLAYS / SHEETS ===== -->
+
+  <div class="overlay" id="ov_sheetFab" onclick="closeOnBg(event,'sheetFab')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Ekle</h3>
+      <div class="sub" id="fabLocLabel">Geçerli klasöre ekle</div>
+      <div class="menu-row" onclick="openSheet('sheetNewFolder')"><i data-icon="folderPlus"></i>Yeni Klasör</div>
+      <div class="menu-row" onclick="simulateUpload()"><i data-icon="upload"></i>Dosya Yükle (simülasyon)</div>
+      <div class="menu-row" onclick="simulateUploadImage()"><i data-icon="image"></i>Örnek Fotoğraf Ekle</div>
+      <div class="menu-row" onclick="closeSheet('sheetFab');refreshView();"><i data-icon="refresh"></i>Yenile</div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetMore" onclick="closeOnBg(event,'sheetMore')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>DogonFiles</h3>
+      <div class="sub">v1.2.0 — deneme arayüzü</div>
+      <div class="menu-row" onclick="toggleRoot()"><i data-icon="shield"></i><span id="rootMenuLabel">Kök Erişimini Etkinleştir</span></div>
+      <div class="menu-row" onclick="openSheet('sheetAbout')"><i data-icon="info"></i>Hakkında</div>
+      <div class="menu-row" onclick="goTab('settings');closeSheet('sheetMore')"><i data-icon="gear"></i>Ayarlar</div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetSort" onclick="closeOnBg(event,'sheetSort')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Sırala</h3>
+      <div class="sub">Dosyaları nasıl sıralamak istersin?</div>
+      <div class="menu-row" onclick="setSort('name')"><i data-icon="check2"></i>Ada göre (A–Z)</div>
+      <div class="menu-row" onclick="setSort('size')"><i data-icon="check2"></i>Boyuta göre (büyük → küçük)</div>
+      <div class="menu-row" onclick="setSort('date')"><i data-icon="check2"></i>Tarihe göre (yeni → eski)</div>
+      <div class="menu-row" onclick="setSort('type')"><i data-icon="check2"></i>Türe göre</div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetNewFolder" onclick="closeOnBg(event,'sheetNewFolder')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Yeni Klasör</h3>
+      <div class="sub">Klasöre bir ad ver</div>
+      <div class="field"><input type="text" id="newFolderInput" placeholder="Klasör adı" value="Yeni Klasör"></div>
+      <button class="btn btn-primary" onclick="createFolder()">Oluştur</button>
+      <button class="btn btn-ghost" onclick="closeSheet('sheetNewFolder')">Vazgeç</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetRename" onclick="closeOnBg(event,'sheetRename')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Yeniden Adlandır</h3>
+      <div class="field"><input type="text" id="renameInput" placeholder="Yeni ad"></div>
+      <button class="btn btn-primary" onclick="confirmRename()">Kaydet</button>
+      <button class="btn btn-ghost" onclick="closeSheet('sheetRename')">Vazgeç</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetCompress" onclick="closeOnBg(event,'sheetCompress')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Arşiv Oluştur</h3>
+      <div class="sub" id="compressSub">1 öğe sıkıştırılacak</div>
+      <div class="field"><label>Arşiv Adı</label><input type="text" id="archiveNameInput" value="arsiv"></div>
+      <div class="field">
+        <label>Format</label>
+        <div class="seg">
+          <div class="seg-btn active" data-fmt="zip" onclick="pickFmt(this,'zip')">.ZIP</div>
+          <div class="seg-btn" data-fmt="7z" onclick="pickFmt(this,'7z')">.7Z</div>
+          <div class="seg-btn" data-fmt="tar.gz" onclick="pickFmt(this,'tar.gz')">.TAR.GZ</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sıkıştırma Seviyesi</label>
+        <input type="range" min="0" max="9" value="6" class="slider" id="levelSlider" oninput="document.getElementById('levelVal').textContent=this.value">
+        <div class="sub" style="margin:6px 0 0;">Seviye: <b id="levelVal" style="color:var(--text1)">6</b> / 9</div>
+      </div>
+      <div class="rowtoggle">
+        <div class="rt-label"><b>Şifre ile koru</b><span>AES-256 simülasyonu</span></div>
+        <div class="switch" id="pwSwitch" onclick="togglePwSwitch()"></div>
+      </div>
+      <div class="field" id="pwField" style="display:none;"><input type="password" id="archivePwInput" placeholder="Arşiv şifresi"></div>
+      <button class="btn btn-primary" onclick="startCompress()">Arşivi Oluştur</button>
+      <button class="btn btn-ghost" onclick="closeSheet('sheetCompress')">Vazgeç</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetProgress" onclick="">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="progwrap">
+        <div class="pico" id="progIcon"><i data-icon="archiveIcn"></i></div>
+        <h3 style="text-align:center;" id="progTitle">Sıkıştırılıyor…</h3>
+        <div class="proglabel" id="progFile">dosya.txt</div>
+        <div class="progbar"><i id="progBar"></i></div>
+        <div class="progpct" id="progPct">%0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetInfo" onclick="closeOnBg(event,'sheetInfo')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3 id="infoName">dosya.txt</h3>
+      <div class="sub">Dosya Bilgisi</div>
+      <div class="info-grid" id="infoGrid"></div>
+      <button class="btn btn-ghost" onclick="closeSheet('sheetInfo')" style="margin-top:14px;">Kapat</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetFileMenu" onclick="closeOnBg(event,'sheetFileMenu')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3 id="fmName">dosya</h3>
+      <div class="sub" id="fmMeta">—</div>
+      <div id="fmMenuItems"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetPicker" onclick="closeOnBg(event,'sheetPicker')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3 id="pickerTitle">Hedef klasör seç</h3>
+      <div class="sub" id="pickerPath">Dahili Depolama</div>
+      <div id="pickerList" style="max-height:44vh;overflow-y:auto;"></div>
+      <button class="btn btn-primary" onclick="confirmPicker()" id="pickerConfirmBtn">Buraya taşı</button>
+      <button class="btn btn-ghost" onclick="closeSheet('sheetPicker')">Vazgeç</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetSearch" onclick="closeOnBg(event,'sheetSearch')">
+    <div class="sheet" style="max-height:90vh;">
+      <div class="sheet-handle"></div>
+      <div class="field"><input type="text" id="searchInput" placeholder="Dosya veya klasör ara…" oninput="doSearch(this.value)" autofocus></div>
+      <div id="searchResults"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetQuickEdit" onclick="closeOnBg(event,'sheetQuickEdit')">
+    <div class="sheet" style="max-height:80vh;">
+      <div class="sheet-handle"></div>
+      <h3>Hızlı Erişimi Düzenle</h3>
+      <div class="sub">Anasayfada göstermek istediklerini aç/kapat, oklarla sırala.</div>
+      <div id="quickEditList"></div>
+      <button class="btn btn-primary" onclick="closeSheet('sheetQuickEdit');render();">Bitti</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov_sheetAbout" onclick="closeOnBg(event,'sheetAbout')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>DogonFiles</h3>
+      <div class="sub">Sürüm 1.2.0 · Doğan tarafından geliştirildi</div>
+      <div class="menu-row"><i data-icon="archiveIcn"></i>ZIP, 7Z, RAR, TAR.GZ, TAR desteği</div>
+      <div class="menu-row"><i data-icon="lock"></i>Şifreli arşiv oluşturma / açma</div>
+      <div class="menu-row"><i data-icon="shield"></i>Kök (root) dosya gezgini</div>
+      <div class="menu-row"><i data-icon="chart"></i>Depolama analizi ve yinelenen dosya bulucu</div>
+      <div class="menu-row"><i data-icon="trash"></i>Çöp kutusu ve geri yükleme</div>
+      <div class="sub" style="margin-top:10px;">Bu, tamamen simüle edilmiş bir arayüz denemesidir — gerçek dosya sistemine erişmez.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   ICONS — minimal stroke set
+============================================================ */
+const ICON = {
+  search:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
+  more:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg>`,
+  sort:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6-6 6 6M6 15l6 6 6-6"/></svg>`,
+  list:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`,
+  grid:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+  check:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>`,
+  check2:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.55"><circle cx="12" cy="12" r="9"/></svg>`,
+  close:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>`,
+  plus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`,
+  home:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>`,
+  folder:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>`,
+  folderOpen:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2H10"/><path d="M3 7l1.5 11a2 2 0 002 2h11a2 2 0 002-2L21 10H5"/></svg>`,
+  folderPlus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path d="M12 11v4M10 13h4"/></svg>`,
+  chart:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>`,
+  trash:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>`,
+  gear:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>`,
+  archiveIcn:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.2"/><path d="M5 9v9a2 2 0 002 2h10a2 2 0 002-2V9"/><path d="M10 13h4"/></svg>`,
+  copy:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>`,
+  move:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l3 3 3-3M19 9l3 3-3 3"/><path d="M2 12h20M12 2v20"/></svg>`,
+  edit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>`,
+  info:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>`,
+  shield:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7z"/></svg>`,
+  lock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>`,
+  refresh:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v6h-6"/></svg>`,
+  upload:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>`,
+  image:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 15l-5-5-9 9"/></svg>`,
+  video:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="15" height="14" rx="2.5"/><path d="M17 10l5-3v10l-5-3"/></svg>`,
+  audio:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>`,
+  doc:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M14 2v6h6"/></svg>`,
+  sheetIcn:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M8 13h8M8 17h8M8 9h3"/></svg>`,
+  pdf:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M14 2v6h6"/><path d="M8 15h1.5a1.5 1.5 0 000-3H8v5"/></svg>`,
+  apk:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="12" rx="2.5"/><path d="M9 8V6a3 3 0 016 0v2"/><path d="M9 13h.01M15 13h.01"/></svg>`,
+  file:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M14 2v6h6"/></svg>`,
+  cpu:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><rect x="2" y="2" width="20" height="20" rx="3"/></svg>`,
+  back:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`,
+  star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.5 7 .9-5 5 1.2 7-6.2-3.4-6.2 3.4 1.2-7-5-5 7-.9z"/></svg>`,
+  extract:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M8 9l4 4 4-4"/><path d="M4 15v4a2 2 0 002 2h12a2 2 0 002-2v-4"/></svg>`,
+  boxOpen:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M3 9v9l9 5 9-5V9"/><path d="M12 14v9"/></svg>`,
+  scan:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 012-2h3M21 8V5a2 2 0 00-2-2h-3M3 16v3a2 2 0 002 2h3M21 16v3a2 2 0 01-2 2h-3"/><path d="M3 12h18"/></svg>`,
+  chevUp:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>`,
+  chevDown:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`,
+};
+
+function setAppVH(){
+  const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight || document.documentElement.clientHeight;
+  document.documentElement.style.setProperty('--appvh', (h*0.01)+'px');
+}
+setAppVH();
+window.addEventListener('resize', setAppVH);
+window.addEventListener('orientationchange', ()=>setTimeout(setAppVH,250));
+if(window.visualViewport) window.visualViewport.addEventListener('resize', setAppVH);
+
+function hydrateIcons(root){
+  (root||document).querySelectorAll('[data-icon]').forEach(el=>{
+    const name = el.dataset.icon;
+    if(ICON[name]) el.innerHTML = ICON[name];
+  });
+}
+
+/* ============================================================
+   MOCK FILESYSTEM
+============================================================ */
+function F(name,size,mtime,ext,extra){return {type:'file',name,size,mtime,ext:ext||name.split('.').pop(),...extra};}
+function D(name,mtime,children){return {type:'folder',name,mtime,children};}
+
+const FS = D('root','—',[
+  D('İndirilenler','26 Tem',[
+    F('proje_yedek.zip',18400000,'26 Tem','zip',{archive:true, contents:[
+      D('src','—',[F('index.js',4200,'—'),F('utils.js',1800,'—'),F('style.css',2600,'—')]),
+      D('assets','—',[F('logo.svg',3100,'—'),F('banner.png',224000,'—')]),
+      F('package.json',890,'—'),
+      F('README.md',1450,'—'),
+    ]}),
+    F('kaynak_kod_v2.tar.gz',9600000,'25 Tem','tar.gz',{archive:true, contents:[
+      D('lib','—',[F('main.c',6200,'—'),F('main.h',900,'—')]),
+      F('Makefile',540,'—'),
+    ]}),
+    F('yedek_2026.rar',3200000,'20 Tem','rar',{archive:true, locked:true, contents:[
+      F('gizli_notlar.txt',1200,'—'),F('sifreler.kdbx',44000,'—'),
+    ]}),
+    F('fatura_temmuz.pdf',412000,'24 Tem','pdf'),
+    F('rapor_taslak.pdf',884000,'19 Tem','pdf'),
+    F('ekran_kaydi.mp4',48200000,'18 Tem','mp4'),
+    F('muzik_indirme.mp3',6400000,'17 Tem','mp3'),
+  ]),
+  D('Belgeler','22 Tem',[
+    F('not_defteri.txt',2100,'22 Tem','txt'),
+    F('sunum_final.pptx',5400000,'21 Tem','pptx'),
+    F('butce_tablosu.xlsx',780000,'20 Tem','xlsx'),
+    F('sozlesme.docx',312000,'15 Tem','docx'),
+  ]),
+  D('Resimler','26 Tem',[
+    F('IMG_20260726_0931.jpg',3400000,'26 Tem','jpg'),
+    F('IMG_20260725_1820.jpg',2900000,'25 Tem','jpg'),
+    F('ekran_goruntusu_01.png',1100000,'24 Tem','png'),
+    F('logo_calisma.svg',18000,'12 Tem','svg'),
+    D('Wallpapers','10 Tem',[F('dark_minimal.png',2200000,'10 Tem','png'),F('geometric.png',1900000,'9 Tem','png')]),
+  ]),
+  D('Videolar','23 Tem',[
+    F('tatil_klip.mp4',182000000,'23 Tem','mp4'),
+    F('ekran_kaydi_bug.mp4',64000000,'19 Tem','mp4'),
+  ]),
+  D('DCIM',' 26 Tem',[
+    D('Camera','26 Tem',[F('20260726_080231.jpg',4100000,'26 Tem','jpg'),F('20260725_193312.jpg',3800000,'25 Tem','jpg')]),
+  ]),
+  D('Android',' —',[
+    D('data','—',[F('.nomedia',0,'—','sys'),D('lol.dogon.notes','—',[F('cache.db',9200,'—')])]),
+  ]),
+  D('APK Yedekleri','14 Tem',[
+    F('DogonVPN.apk',18400000,'14 Tem','apk'),
+    F('DogonGallery.apk',22100000,'11 Tem','apk'),
+    F('DogonNotes.apk',15600000,'8 Tem','apk'),
+  ]),
+  D('WhatsApp','—',[
+    D('Media','—',[D('WhatsApp Images','—',[F('IMG-20260722-WA0007.jpg',290000,'22 Tem','jpg')])]),
+  ]),
+  F('.dogonfiles_ayarlar.json',340,'—','sys',{hidden:true}),
+]);
+
+const TRASH = [];
+let ROOT_MODE = false;
+const ROOT_FS = D('root-sys','—',[
+  D('system','—',[F('build.prop',5400,'—'),D('app','—',[F('Settings.apk',9800000,'—')])]),
+  D('data','—',[D('data','—',[F('com.android.vending',0,'—','sys')])]),
+  D('vendor','—',[F('vendor.img',180000000,'—')]),
+  F('boot.img',44000000,'—'),
+]);
+
+/* ============================================================
+   QUICK ACCESS CATALOG (customizable home cards)
+============================================================ */
+const QUICK_CATALOG = [
+  {id:'archives',  title:'Arşivler',      sub:'3 dosya · 31 MB',   icon:'archiveIcn', cls:'gold',   kind:'archives'},
+  {id:'apk',       title:"APK'lar",       sub:'3 dosya · 55 MB',   icon:'apk',        cls:'cyan',   kind:'apk'},
+  {id:'images',    title:'Resimler',      sub:'7 dosya · 19 MB',   icon:'image',      cls:'pink',   kind:'images'},
+  {id:'videos',    title:'Videolar',      sub:'4 dosya · 294 MB',  icon:'video',      cls:'red',    kind:'videos'},
+  {id:'docs',      title:'Belgeler',      sub:'4 dosya · 6.3 MB',  icon:'doc',        cls:'blue',   kind:'docs'},
+  {id:'audio',     title:'Ses Dosyaları', sub:'2 dosya · 7.4 MB',  icon:'audio',      cls:'violet', kind:'audio'},
+  {id:'allfiles',  title:'Tüm Dosyalar',  sub:'Depolamayı gezin',  icon:'folderOpen', cls:'violet', kind:'allfiles'},
+  {id:'downloads', title:'İndirilenler',  sub:'Klasörü aç',        icon:'folder',     cls:'gold',   kind:'folder', folderName:'İndirilenler'},
+  {id:'trashq',    title:'Çöp Kutusu',    sub:'Silinen öğeler',   icon:'trash',      cls:'red',    kind:'trash'},
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+let state = {
+  tab:'home',
+  path:[FS],           // stack of folder nodes
+  archiveStack:[],       // when inside an archive: [{archiveNode, path:[folder,...]}]
+  sortBy:'name',
+  gridView:false,
+  selectMode:false,
+  selected:new Set(),
+  clipboard:null, // {mode:'copy'|'move', items:[{parent,node}]}
+  pickerAction:null,
+  pickerPath:[FS],
+  favorites:new Set(['İndirilenler']),
+  quickAccess:['archives','apk','images','videos','docs','allfiles'],
+};
+
+function fmtSize(b){
+  if(b===0) return '0 B';
+  if(b<1024) return b+' B';
+  if(b<1024*1024) return (b/1024).toFixed(1)+' KB';
+  if(b<1024*1024*1024) return (b/1024/1024).toFixed(1)+' MB';
+  return (b/1024/1024/1024).toFixed(2)+' GB';
+}
+function folderSize(node){
+  if(node.type==='file') return node.size;
+  return (node.children||[]).reduce((s,c)=>s+folderSize(c),0);
+}
+function currentFolder(){ return state.path[state.path.length-1]; }
+
+/* ============================================================
+   ICON RESOLUTION PER FILE
+============================================================ */
+const EXT_MAP = {
+  zip:['archiveIcn','gold'], rar:['archiveIcn','gold'], '7z':['archiveIcn','gold'], 'tar.gz':['archiveIcn','gold'], tar:['archiveIcn','gold'], gz:['archiveIcn','gold'],
+  jpg:['image','pink'], jpeg:['image','pink'], png:['image','pink'], svg:['image','pink'], gif:['image','pink'],
+  mp4:['video','red'], mov:['video','red'], mkv:['video','red'],
+  mp3:['audio','violet'], wav:['audio','violet'], m4a:['audio','violet'],
+  pdf:['pdf','red'],
+  doc:['doc','blue'], docx:['doc','blue'], txt:['doc','blue'], md:['doc','blue'],
+  xls:['sheetIcn','green'], xlsx:['sheetIcn','green'],
+  ppt:['doc','gold'], pptx:['doc','gold'],
+  apk:['apk','cyan'],
+  sys:['file','text3'],
+};
+function iconFor(node){
+  if(node.type==='folder') return {icon:'folder', cls:'blue'};
+  const ext=(node.ext||'').toLowerCase();
+  const m = EXT_MAP[ext] || ['file','text3'];
+  return {icon:m[0], cls:m[1]};
+}
+
+/* ============================================================
+   RENDER: TABS
+============================================================ */
+function goTab(tab){
+  state.tab=tab;
+  exitSelectMode();
+  document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
+  if(tab==='files'){ state.path=[FS]; state.archiveStack=[]; }
+  render();
+}
+
+function render(){
+  const scroll = document.getElementById('scroll');
+  const pathbar = document.getElementById('pathbar');
+  const toolbar = document.getElementById('toolbar');
+  const fab = document.getElementById('fab');
+  document.getElementById('brandSub').textContent = ROOT_MODE? 'Kök Erişimi Aktif' : 'Dahili Depolama';
+
+  if(state.tab==='home'){
+    pathbar.classList.add('viewport-hide'); toolbar.classList.add('viewport-hide'); fab.classList.add('hidden');
+    scroll.innerHTML = renderHome();
+  } else if(state.tab==='files'){
+    pathbar.classList.remove('viewport-hide'); toolbar.classList.remove('viewport-hide'); fab.classList.remove('hidden');
+    renderPathbar();
+    renderToolbar();
+    scroll.innerHTML = renderFileList();
+  } else if(state.tab==='analyzer'){
+    pathbar.classList.add('viewport-hide'); toolbar.classList.add('viewport-hide'); fab.classList.add('hidden');
+    scroll.innerHTML = renderAnalyzer();
+  } else if(state.tab==='trash'){
+    pathbar.classList.add('viewport-hide'); toolbar.classList.add('viewport-hide'); fab.classList.add('hidden');
+    scroll.innerHTML = renderTrash();
+  } else if(state.tab==='settings'){
+    pathbar.classList.add('viewport-hide'); toolbar.classList.add('viewport-hide'); fab.classList.add('hidden');
+    scroll.innerHTML = renderSettings();
+  }
+  scroll.scrollTop = 0;
+}
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const used = 81, total = 128, pct = Math.round(used/total*100);
+  return `
+    <div class="storage-card">
+      <div class="donut" style="background:conic-gradient(var(--gold) 0% ${pct}%, var(--bg-elev3) ${pct}% 100%);">
+        <div class="donut-label">${pct}%<sub>kullanılan</sub></div>
+      </div>
+      <div class="storage-info">
+        <b>${used} GB / ${total} GB kullanılıyor</b>
+        <span>${total-used} GB boş alan mevcut</span>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+      </div>
+    </div>
+
+    <div class="section-title first" style="display:flex;align-items:center;">
+      <span>Hızlı Erişim</span>
+      <span class="edit-link" onclick="openQuickEdit()">${ICON.edit}Düzenle</span>
+    </div>
+    <div class="qgrid">
+      ${state.quickAccess.map(id=>{
+        const item = QUICK_CATALOG.find(q=>q.id===id);
+        if(!item) return '';
+        return `<div class="qcard tint-${item.cls}" onclick="quickCardTap('${item.id}')">
+          <div class="qtitle">${item.title}</div><div class="qsub">${item.sub}</div>
+          <div class="qicon bg-${item.cls}">${ICON[item.icon]}</div>
+        </div>`;
+      }).join('')}
+      ${state.quickAccess.length===0? `<div class="qcard" style="align-items:center;justify-content:center;display:flex;grid-column:1/3;cursor:pointer;" onclick="openQuickEdit()"><div class="qsub" style="text-align:center;">Kart eklemek için düzenle'ye dokun</div></div>` : ''}
+    </div>
+
+    <div class="section-title">Son Kullanılanlar</div>
+    <div class="hscroll">
+      ${recentFiles().map(f=>{
+        const ic=iconFor(f.node);
+        return `<div class="rfile" onclick="openRecentFile('${f.path.join('/')}')">
+          <div class="fico bg-${ic.cls}">${ICON[ic.icon]}</div>
+          <div class="fname">${f.node.name}</div>
+          <div class="fmeta">${fmtSize(f.node.size)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="section-title">Depolama Dağılımı</div>
+    <div class="storage-card" style="flex-direction:column;align-items:stretch;padding:6px 18px;">
+      ${analyzerCategories().slice(0,4).map(c=>catRow(c)).join('')}
+    </div>
+  `;
+}
+
+function recentFiles(){
+  // flatten a few files across tree, sorted arbitrarily for demo
+  const out=[];
+  function walk(node,path){
+    (node.children||[]).forEach(c=>{
+      if(c.type==='file') out.push({node:c, path:[...path,c.name]});
+      else walk(c,[...path,c.name]);
+    });
+  }
+  walk(FS,['İndirilenler']);
+  return out.filter(f=>f.node.ext!=='sys').slice(0,10).sort((a,b)=> (a.node.mtime<b.node.mtime?1:-1)).slice(0,8);
+}
+function openRecentFile(pathStr){
+  // just show info sheet for demo simplicity
+  const name = pathStr.split('/').pop();
+  showToast(`${name} açılıyor…`, 'ok');
+}
+
+function quickOpen(kind){
+  goTab('files');
+  const catMap = {
+    archives:n=>n.type==='file'&&n.archive,
+    apk:n=>n.type==='file'&&n.ext==='apk',
+    images:n=>n.type==='file'&&['jpg','jpeg','png','svg','gif'].includes(n.ext),
+    videos:n=>n.type==='file'&&['mp4','mov','mkv'].includes(n.ext),
+    docs:n=>n.type==='file'&&['doc','docx','txt','xlsx','pptx','pdf','md'].includes(n.ext),
+    audio:n=>n.type==='file'&&['mp3','wav','m4a'].includes(n.ext),
+  };
+  const matches=[]; 
+  function walk(node,path){
+    (node.children||[]).forEach(c=>{
+      if(catMap[kind](c)) matches.push(c);
+      if(c.type==='folder') walk(c,[...path,c.name]);
+    });
+  }
+  walk(FS,[]);
+  const virtualFolder = D(labelForKind(kind),'—',matches);
+  state.path=[FS, virtualFolder];
+  state.virtual = true;
+  render();
+}
+function labelForKind(k){return {archives:'Arşivler',apk:"APK'lar",images:'Resimler',videos:'Videolar',docs:'Belgeler',audio:'Ses Dosyaları'}[k];}
+
+function quickCardTap(id){
+  const item = QUICK_CATALOG.find(q=>q.id===id);
+  if(!item) return;
+  if(item.kind==='allfiles'){ goTab('files'); return; }
+  if(item.kind==='trash'){ goTab('trash'); return; }
+  if(item.kind==='folder'){
+    const target = FS.children.find(c=>c.name===item.folderName);
+    goTab('files');
+    if(target){ state.path=[FS, target]; render(); }
+    return;
+  }
+  quickOpen(item.kind);
+}
+
+/* ---------- QUICK ACCESS EDIT SHEET ---------- */
+function openQuickEdit(){ renderQuickEditList(); openSheet('sheetQuickEdit'); }
+function renderQuickEditList(){
+  const list = document.getElementById('quickEditList');
+  const enabled = state.quickAccess;
+  const ordered = [...enabled.map(id=>QUICK_CATALOG.find(q=>q.id===id)), ...QUICK_CATALOG.filter(q=>!enabled.includes(q.id))];
+  list.innerHTML = ordered.map(item=>{
+    const isOn = enabled.includes(item.id);
+    const pos = enabled.indexOf(item.id);
+    return `<div class="qe-row">
+      <div class="qico bg-${item.cls}">${ICON[item.icon]}</div>
+      <div class="qname">${item.title}</div>
+      ${isOn? `<div class="qe-order">
+        <button ${pos<=0?'disabled':''} onclick="moveQuickItem('${item.id}',-1)">${ICON.chevUp}</button>
+        <button ${pos>=enabled.length-1?'disabled':''} onclick="moveQuickItem('${item.id}',1)">${ICON.chevDown}</button>
+      </div>`:''}
+      <div class="switch ${isOn?'on':''}" onclick="toggleQuickItem('${item.id}')"></div>
+    </div>`;
+  }).join('');
+  hydrateIcons(list);
+}
+function toggleQuickItem(id){
+  const idx = state.quickAccess.indexOf(id);
+  if(idx>-1) state.quickAccess.splice(idx,1);
+  else state.quickAccess.push(id);
+  renderQuickEditList();
+}
+function moveQuickItem(id,dir){
+  const idx = state.quickAccess.indexOf(id);
+  const swap = idx+dir;
+  if(idx<0||swap<0||swap>=state.quickAccess.length) return;
+  [state.quickAccess[idx],state.quickAccess[swap]]=[state.quickAccess[swap],state.quickAccess[idx]];
+  renderQuickEditList();
+}
+
+function catRow(c){
+  return `<div class="catrow">
+    <div class="cico bg-${c.cls}">${ICON[c.icon]}</div>
+    <div class="cinfo"><div class="cname">${c.name}</div><div class="cbar"><i style="width:${c.pct}%;background:var(--${c.cls})"></i></div></div>
+    <div class="csize">${c.sizeLabel}</div>
+  </div>`;
+}
+function analyzerCategories(){
+  return [
+    {name:'Videolar', icon:'video', cls:'red', pct:52, sizeLabel:'42 GB'},
+    {name:'Resimler', icon:'image', cls:'pink', pct:18, sizeLabel:'14.6 GB'},
+    {name:'Arşivler', icon:'archiveIcn', cls:'gold', pct:14, sizeLabel:'11.2 GB'},
+    {name:'Uygulamalar (APK)', icon:'apk', cls:'cyan', pct:9, sizeLabel:'7.1 GB'},
+    {name:'Belgeler', icon:'doc', cls:'blue', pct:5, sizeLabel:'3.9 GB'},
+    {name:'Ses Dosyaları', icon:'audio', cls:'violet', pct:2, sizeLabel:'2.2 GB'},
+  ];
+}
+
+/* ---------- ANALYZER ---------- */
+let scanState = 'idle';
+function renderAnalyzer(){
+  return `
+    <div class="section-title first">Depolama Analizi</div>
+    <div class="storage-card" style="flex-direction:column;align-items:stretch;padding:16px 18px;">
+      ${analyzerCategories().map(c=>catRow(c)).join('')}
+    </div>
+
+    <div class="section-title">Yinelenen Dosya Bulucu</div>
+    <div class="storage-card" id="dupCard" style="flex-direction:column;align-items:stretch;gap:10px;">
+      ${renderDupCard()}
+    </div>
+
+    <div class="section-title">En Büyük Dosyalar</div>
+    <div style="background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-l);padding:2px 16px;">
+      ${biggestFiles().map(f=>{
+        const ic=iconFor(f);
+        return `<div class="filerow" style="padding-left:0;padding-right:0;" onclick="handleFileTap(FS,${JSON.stringify(f.name).replace(/"/g,'&quot;')},true)">
+          <div class="fico-wrap bg-${ic.cls}">${ICON[ic.icon]}</div>
+          <div class="finfo"><div class="fn">${f.name}</div><div class="fm">${f.__path||'İndirilenler'}</div></div>
+          <div class="csize">${fmtSize(f.size)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+function biggestFiles(){
+  const out=[];
+  function walk(node,path){
+    (node.children||[]).forEach(c=>{
+      if(c.type==='file'){ c.__path = path.join(' / ')||'—'; out.push(c);}
+      else walk(c,[...path,c.name]);
+    });
+  }
+  walk(FS,[]);
+  return out.sort((a,b)=>b.size-a.size).slice(0,6);
+}
+function renderDupCard(){
+  if(scanState==='idle'){
+    return `<div style="display:flex;align-items:center;gap:12px;">
+      <div class="cico bg-cyan" style="width:40px;height:40px;">${ICON.scan}</div>
+      <div style="flex:1;"><div class="cname">Depolamayı tara</div><div class="fmeta" style="margin-top:2px;">Yinelenen dosyaları bul ve alan kazan</div></div>
+    </div>
+    <button class="btn btn-primary" onclick="runDupScan()">Taramayı Başlat</button>`;
+  }
+  if(scanState==='scanning'){
+    return `<div class="proglabel" style="text-align:left;margin-bottom:10px;">Dosyalar taranıyor…</div>
+    <div class="progbar"><i style="width:100%;animation:none;background:linear-gradient(90deg,var(--gold),#c98f2b);"></i></div>`;
+  }
+  return `<div style="display:flex;align-items:center;gap:12px;">
+      <div class="cico bg-green" style="width:40px;height:40px;">${ICON.check}</div>
+      <div style="flex:1;"><div class="cname">3 yinelenen dosya bulundu</div><div class="fmeta" style="margin-top:2px;">Toplam 24.4 MB alan kazanılabilir</div></div>
+    </div>
+    <button class="btn btn-danger" onclick="scanState='idle';render();showToast('Yinelenen dosyalar temizlendi','ok');">Yinelenenleri Temizle</button>`;
+}
+function runDupScan(){
+  scanState='scanning'; render();
+  setTimeout(()=>{ scanState='done'; render(); }, 1400);
+}
+
+/* ---------- TRASH ---------- */
+function renderTrash(){
+  if(TRASH.length===0){
+    return emptyState('trash','Çöp kutusu boş','Sildiğin dosyalar burada 30 gün süreyle saklanır.');
+  }
+  return `
+    <div class="section-title first">Çöp Kutusu · ${TRASH.length} öğe</div>
+    <div style="background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-l);padding:2px 16px;margin-bottom:14px;">
+      ${TRASH.map((t,i)=>{
+        const ic=iconFor(t.node);
+        return `<div class="filerow" style="padding-left:0;padding-right:0;">
+          <div class="fico-wrap bg-${ic.cls}" style="opacity:.6;">${ICON[ic.icon]}</div>
+          <div class="finfo"><div class="fn">${t.node.name}</div><div class="fm">${t.node.type==='folder'?fmtSize(folderSize(t.node)):fmtSize(t.node.size)} · silindi</div></div>
+          <div class="frow-more" onclick="restoreTrash(${i})" style="color:var(--green);">${ICON.refresh}</div>
+          <div class="frow-more" onclick="deleteTrashForever(${i})" style="color:var(--red);">${ICON.close}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="btn btn-danger" onclick="emptyTrash()">Çöp Kutusunu Boşalt</button>
+  `;
+}
+function restoreTrash(i){
+  const t=TRASH[i];
+  t.parent.children.push(t.node);
+  TRASH.splice(i,1);
+  showToast(`${t.node.name} geri yüklendi`,'ok');
+  render();
+}
+function deleteTrashForever(i){
+  showToast(`${TRASH[i].node.name} kalıcı olarak silindi`,'ok');
+  TRASH.splice(i,1);
+  render();
+}
+function emptyTrash(){
+  TRASH.length=0;
+  showToast('Çöp kutusu boşaltıldı','ok');
+  render();
+}
+
+/* ---------- SETTINGS ---------- */
+function renderSettings(){
+  return `
+    <div class="section-title first">Genel</div>
+    <div style="background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-l);padding:4px 18px;">
+      ${settingsToggle('rootToggleS', ROOT_MODE, 'Kök (Root) Erişimi', 'Sistem klasörlerine eriş', ()=>toggleRoot())}
+      ${settingsToggle('hiddenToggleS', true, 'Gizli Dosyaları Göster', 'Nokta (.) ile başlayan dosyalar', ()=>showToast('Ayar güncellendi','ok'))}
+      ${settingsToggle('notifToggleS', true, 'Bildirimler', 'İşlem tamamlandığında bildir', ()=>showToast('Ayar güncellendi','ok'))}
+    </div>
+
+    <div class="section-title">Arşiv</div>
+    <div style="background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-l);padding:4px 18px;">
+      <div class="menu-row" onclick="showToast('Varsayılan format: ZIP','ok')">${ICON.archiveIcn}Varsayılan Format<span style="margin-left:auto;color:var(--text3);font-weight:600;">ZIP</span></div>
+      ${settingsToggle('autoExtractS', false, 'Otomatik Çıkart', 'İndirilen arşivleri otomatik aç', ()=>showToast('Ayar güncellendi','ok'))}
+    </div>
+
+    <div class="section-title">Görünüm</div>
+    <div style="background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-l);padding:4px 18px;">
+      ${settingsToggle('darkToggleS', true, 'Karanlık Tema', 'DogonFiles her zaman koyu temalıdır', null, true)}
+    </div>
+
+    <div class="section-title">Hakkında</div>
+    <div style="background:var(--bg-elev1);border:1px solid var(--border);border-radius:var(--radius-l);padding:4px 18px;">
+      <div class="menu-row" onclick="openSheet('sheetAbout')">${ICON.info}Sürüm 1.2.0</div>
+      <div class="menu-row danger" onclick="showToast('Önbellek temizlendi (128 MB)','ok')">${ICON.trash}Önbelleği Temizle</div>
+    </div>
+  `;
+}
+function settingsToggle(id,initial,title,sub,onclickFn,disabled){
+  return `<div class="rowtoggle">
+    <div class="rt-label"><b>${title}</b><span>${sub}</span></div>
+    <div class="switch ${initial?'on':''}" id="${id}" ${disabled?'':`onclick="toggleSwitch('${id}')"`} style="${disabled?'opacity:.5;':''}"></div>
+  </div>`;
+}
+function toggleSwitch(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('on');
+  if(id==='rootToggleS'){ toggleRoot(); return; }
+  showToast('Ayar güncellendi','ok');
+}
+
+/* ---------- FILE BROWSER ---------- */
+function renderPathbar(){
+  const el = document.getElementById('pathbar');
+  let crumbs;
+  if(state.archiveStack.length){
+    const top = state.archiveStack[state.archiveStack.length-1];
+    crumbs = [{name: (ROOT_MODE?'Kök':'Depolama')}, {name: top.archiveNode.name}, ...top.path.slice(1).map(p=>({name:p.name}))];
+  } else {
+    crumbs = state.path.map((p,i)=> i===0 ? {name: ROOT_MODE?'Kök':'Depolama'} : {name:p.name});
+  }
+  el.innerHTML = crumbs.map((c,i)=>{
+    const isLast = i===crumbs.length-1;
+    return `${i>0?`<span class="crumb-sep">/</span>`:''}<span class="crumb ${isLast?'active':''}" onclick="jumpToCrumb(${i})">${c.name}</span>`;
+  }).join('');
+}
+function jumpToCrumb(i){
+  if(state.archiveStack.length){
+    if(i===0){ state.archiveStack=[]; render(); return; }
+    const top=state.archiveStack[state.archiveStack.length-1];
+    if(i===1){ top.path = [top.path[0]]; render(); return; }
+    top.path = top.path.slice(0, i-1);
+    render();
+    return;
+  }
+  state.path = state.path.slice(0, i+1);
+  render();
+}
+function renderToolbar(){
+  document.getElementById('sortLabel').textContent = {name:'Ada göre',size:'Boyuta göre',date:'Tarihe göre',type:'Türe göre'}[state.sortBy];
+  document.getElementById('viewIcon').innerHTML = state.gridView ? ICON.grid : ICON.list;
+}
+function toggleGrid(){ state.gridView=!state.gridView; render(); }
+function setSort(s){ state.sortBy=s; closeSheet('sheetSort'); render(); }
+
+function sortedChildren(children){
+  const arr=[...children];
+  arr.sort((a,b)=>{
+    if(a.type!==b.type) return a.type==='folder'?-1:1;
+    if(state.sortBy==='name') return a.name.localeCompare(b.name,'tr');
+    if(state.sortBy==='size') return (b.type==='folder'?folderSize(b):b.size)-(a.type==='folder'?folderSize(a):a.size);
+    if(state.sortBy==='date') return (a.mtime<b.mtime?1:-1);
+    if(state.sortBy==='type') return (a.ext||'').localeCompare(b.ext||'');
+    return 0;
+  });
+  return arr;
+}
+
+function renderFileList(){
+  if(state.archiveStack.length){
+    return renderArchiveView();
+  }
+  const folder = currentFolder();
+  const children = sortedChildren(folder.children||[]);
+  if(children.length===0){
+    return emptyState('folder','Bu klasör boş','Buraya dosya ekleyerek başla.');
+  }
+  return `<div>${children.map(node=>fileRow(node)).join('')}</div>`;
+}
+
+function fileRow(node){
+  const ic = iconFor(node);
+  const isSel = state.selected.has(node);
+  const meta = node.type==='folder'
+    ? `${(node.children||[]).length} öğe`
+    : `${fmtSize(node.size)} · ${node.mtime||''}`;
+  return `<div class="filerow" onclick="handleRowClick(${nodeRef(node)})" oncontextmenu="return false;">
+    ${state.selectMode? `<div class="frow-check ${isSel?'checked':''}" onclick="event.stopPropagation();toggleSelect(${nodeRef(node)})">${ICON.check}</div>`:''}
+    <div class="fico-wrap bg-${ic.cls}">${ICON[ic.icon]}</div>
+    <div class="finfo">
+      <div class="fn">${node.name}</div>
+      <div class="fm">${meta}${node.locked?`<svg class="lockdot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>`:''}${node.hidden?'· gizli':''}</div>
+    </div>
+    ${!state.selectMode? `<div class="frow-more" onclick="event.stopPropagation();openFileMenu(${nodeRef(node)})">${ICON.more}</div>`:''}
+  </div>`;
+}
+// simple node registry so we can pass identity through inline onclick without huge JSON
+let NODE_REGISTRY = [];
+function nodeRef(node){ NODE_REGISTRY.push(node); return NODE_REGISTRY.length-1; }
+function nodeFromRef(i){ return NODE_REGISTRY[i]; }
+
+function handleRowClick(ref){
+  const node = nodeFromRef(ref);
+  if(state.selectMode){ toggleSelect(ref); return; }
+  if(node.type==='folder'){
+    state.path.push(node); render(); return;
+  }
+  if(node.archive){
+    state.archiveStack.push({archiveNode:node, path:[node]});
+    render(); return;
+  }
+  // regular file tap -> preview toast
+  showToast(`${node.name} açılıyor…`,'ok');
+}
+function handleFileTap(root,name,dummy){ showToast(`${name} açılıyor…`,'ok'); }
+
+function toggleSelect(ref){
+  const node = nodeFromRef(ref);
+  if(state.selected.has(node)) state.selected.delete(node); else state.selected.add(node);
+  updateSelBar();
+  render();
+}
+function enterSelectMode(){ state.selectMode=true; state.selected=new Set(); render(); updateSelBar(); }
+function exitSelectMode(){ state.selectMode=false; state.selected=new Set(); updateSelBar(); }
+function updateSelBar(){
+  const bar=document.getElementById('selbar');
+  const fab=document.getElementById('fab');
+  if(state.selectMode && state.tab==='files'){
+    bar.classList.add('show');
+    fab.classList.add('hidden');
+    document.getElementById('selCount').textContent = state.selected.size;
+  } else {
+    bar.classList.remove('show');
+    if(state.tab==='files') fab.classList.remove('hidden');
+  }
+}
+
+/* ---------- ARCHIVE VIEW ---------- */
+function currentArchiveFolder(){
+  const top = state.archiveStack[state.archiveStack.length-1];
+  return top.path[top.path.length-1];
+}
+function renderArchiveView(){
+  const top = state.archiveStack[state.archiveStack.length-1];
+  const arc = top.archiveNode;
+  const folder = currentArchiveFolder();
+  const children = sortedChildren(folder.children||[]);
+  const count = countAll(arc);
+  return `
+    <div class="archead">
+      <div class="archead-top">
+        <div class="aicon">${ICON.archiveIcn}</div>
+        <div>
+          <div class="aname">${arc.name}</div>
+          <div class="ameta">${fmtSize(arc.size)} · ${count} öğe ${arc.locked?'· 🔒 şifreli':''}</div>
+        </div>
+      </div>
+      <div class="archead-actions">
+        <button class="primary" onclick="extractAll(${nodeRef(arc)})">${ICON.extract}Tümünü Çıkar</button>
+        <button onclick="closeArchive()">${ICON.close}Kapat</button>
+      </div>
+    </div>
+    ${children.length? children.map(node=>archiveRow(node,top)).join('') : emptyState('folder','Klasör boş','')}
+  `;
+}
+function countAll(node){
+  let c=0;
+  (node.contents||node.children||[]).forEach(ch=>{ c++; if(ch.type==='folder'||ch.contents) c+=countAll(ch); });
+  return c;
+}
+function archiveRow(node,top){
+  const ic=iconFor(node);
+  const meta = node.type==='folder' ? `${(node.children||[]).length} öğe` : fmtSize(node.size);
+  return `<div class="filerow" onclick="archiveRowClick(${nodeRef(node)})">
+    <div class="fico-wrap bg-${ic.cls}">${ICON[ic.icon]}</div>
+    <div class="finfo"><div class="fn">${node.name}</div><div class="fm">${meta}</div></div>
+    <div class="frow-more" onclick="event.stopPropagation();extractSingle(${nodeRef(node)})">${ICON.extract}</div>
+  </div>`;
+}
+function archiveRowClick(ref){
+  const node = nodeFromRef(ref);
+  if(node.type==='folder'){
+    const top = state.archiveStack[state.archiveStack.length-1];
+    top.path.push(node);
+    render();
+  } else {
+    showToast(`${node.name} önizleniyor…`,'ok');
+  }
+}
+function closeArchive(){ state.archiveStack.pop(); render(); }
+
+// need archive nodes to expose 'children' too for rendering reuse
+(function normalizeArchives(node){
+  if(node.type==='file' && node.archive && node.contents && !node.children){
+    node.children = node.contents;
+    (function fix(n){ (n.children||[]).forEach(c=>{ if(c.type==='folder') fix(c); }); })(node);
+  }
+  (node.children||[]).forEach(normalizeArchives);
+})(FS);
+
+function extractAll(ref){
+  const arc = nodeFromRef(ref);
+  runProgress('extract', arc.name, ()=>{
+    const parent = findParentInTree(FS, arc) || currentFolder();
+    const extractedFolder = D(arc.name.replace(/\.(zip|rar|7z|tar\.gz|tar)$/i,''), '26 Tem', deepClone(arc.children||[]));
+    (parent.children||currentFolder().children).push(extractedFolder);
+    closeArchive();
+    showToast(`${countAll(arc)} dosya çıkarıldı`,'ok');
+    render();
+  });
+}
+function extractSingle(ref){
+  const node = nodeFromRef(ref);
+  runProgress('extract', node.name, ()=>{
+    currentFolder().children.push(deepClone(node));
+    showToast(`${node.name} çıkarıldı`,'ok');
+    render();
+  });
+}
+function deepClone(x){ return JSON.parse(JSON.stringify(x)); }
+function findParentInTree(root, target){
+  for(const c of (root.children||[])){
+    if(c===target) return root;
+    if(c.type==='folder'){ const r=findParentInTree(c,target); if(r) return r; }
+  }
+  return null;
+}
+
+/* ---------- EMPTY STATE ---------- */
+function emptyState(icon,title,sub){
+  return `<div class="empty-state">${ICON[icon]||ICON.folder}<b>${title}</b><span>${sub}</span></div>`;
+}
+
+/* ============================================================
+   SHEETS / MODALS
+============================================================ */
+function openSheet(id){ document.getElementById('ov_'+id).classList.add('show'); }
+function closeSheet(id){ document.getElementById('ov_'+id).classList.remove('show'); }
+function closeOnBg(e,id){ if(e.target.id==='ov_'+id) closeSheet(id); }
+
+function openSearch(){ openSheet('sheetSearch'); document.getElementById('searchResults').innerHTML=''; setTimeout(()=>document.getElementById('searchInput').focus(),200); }
+function doSearch(q){
+  const res = document.getElementById('searchResults');
+  if(!q.trim()){ res.innerHTML=''; return; }
+  const matches=[];
+  function walk(node,path){
+    (node.children||[]).forEach(c=>{
+      if(c.name.toLowerCase().includes(q.toLowerCase())) matches.push({node:c,path});
+      if(c.type==='folder') walk(c,[...path,c.name]);
+    });
+  }
+  walk(FS,[]);
+  if(matches.length===0){ res.innerHTML=`<div class="sub" style="text-align:center;padding:30px 0;">Sonuç bulunamadı</div>`; return; }
+  res.innerHTML = matches.slice(0,20).map(m=>{
+    const ic=iconFor(m.node);
+    return `<div class="filerow" style="padding-left:0;padding-right:0;">
+      <div class="fico-wrap bg-${ic.cls}">${ICON[ic.icon]}</div>
+      <div class="finfo"><div class="fn">${m.node.name}</div><div class="fm">${m.path.join(' / ')||'Depolama'}</div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- FILE MENU ---------- */
+let activeMenuNode = null;
+function openFileMenu(ref){
+  const node = nodeFromRef(ref);
+  activeMenuNode = node;
+  document.getElementById('fmName').textContent = node.name;
+  document.getElementById('fmMeta').textContent = node.type==='folder' ? `${(node.children||[]).length} öğe` : `${fmtSize(node.size)} · ${node.mtime||''}`;
+  const items = document.getElementById('fmMenuItems');
+  let rows = '';
+  if(node.type==='folder'){
+    rows += menuRow('folderOpen','Aç',`state.path.push(activeMenuNode);closeSheet('sheetFileMenu');render();`);
+  } else if(node.archive){
+    rows += menuRow('boxOpen','Arşivi Aç',`state.archiveStack.push({archiveNode:activeMenuNode,path:[activeMenuNode]});closeSheet('sheetFileMenu');render();`);
+    rows += menuRow('extract','Tümünü Çıkar',`closeSheet('sheetFileMenu');extractAll(nodeRef(activeMenuNode));`);
+  } else {
+    rows += menuRow('file','Önizle',`closeSheet('sheetFileMenu');showToast(activeMenuNode.name+' açılıyor…','ok');`);
+  }
+  rows += menuRow('star','Favorilere Ekle',`closeSheet('sheetFileMenu');showToast('Favorilere eklendi','ok');`);
+  rows += menuRow('archiveIcn','Sıkıştır',`closeSheet('sheetFileMenu');state.selected=new Set([activeMenuNode]);actionCompress();`);
+  rows += menuRow('copy','Kopyala',`closeSheet('sheetFileMenu');state.selected=new Set([activeMenuNode]);openPicker('copy');`);
+  rows += menuRow('move','Taşı',`closeSheet('sheetFileMenu');state.selected=new Set([activeMenuNode]);openPicker('move');`);
+  rows += menuRow('edit','Yeniden Adlandır',`closeSheet('sheetFileMenu');state.selected=new Set([activeMenuNode]);actionRename();`);
+  rows += menuRow('info','Bilgi',`closeSheet('sheetFileMenu');showInfo(activeMenuNode);`);
+  rows += menuRow('trash','Sil','delete',true);
+  items.innerHTML = rows;
+  // wire delete separately (needs closure) 
+  const trashRow = items.querySelector('[data-danger]');
+  if(trashRow) trashRow.onclick = ()=>{ closeSheet('sheetFileMenu'); state.selected=new Set([node]); actionDelete(); };
+  openSheet('sheetFileMenu');
+}
+function menuRow(icon,label,onclick,danger){
+  if(danger){
+    return `<div class="menu-row danger" data-danger="1">${ICON[icon]}${label}</div>`;
+  }
+  return `<div class="menu-row" onclick="${onclick}">${ICON[icon]}${label}</div>`;
+}
+
+/* ---------- INFO ---------- */
+function showInfo(node){
+  document.getElementById('infoName').textContent = node.name;
+  const isFolder = node.type==='folder';
+  const size = isFolder ? folderSize(node) : node.size;
+  const rows = [
+    ['Tür', isFolder? 'Klasör' : (node.ext||'').toUpperCase()+' Dosyası'],
+    ['Boyut', fmtSize(size)],
+    ['Değiştirilme', node.mtime||'—'],
+    ['Konum', pathLabel()],
+  ];
+  if(node.archive){ rows.push(['Arşiv İçeriği', countAll(node)+' öğe']); rows.push(['Şifreli', node.locked?'Evet':'Hayır']); }
+  document.getElementById('infoGrid').innerHTML = rows.map(r=>`<div class="info-item"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
+  openSheet('sheetInfo');
+}
+function pathLabel(){
+  return state.path.map((p,i)=>i===0?'Depolama':p.name).join(' / ');
+}
+
+/* ---------- RENAME ---------- */
+function actionRename(){
+  const items = [...state.selected];
+  if(items.length!==1){ showToast('Yeniden adlandırmak için tek öğe seç','warn'); return; }
+  document.getElementById('renameInput').value = items[0].name;
+  openSheet('sheetRename');
+}
+function confirmRename(){
+  const items=[...state.selected];
+  const newName = document.getElementById('renameInput').value.trim();
+  if(!newName){ return; }
+  items[0].name = newName;
+  closeSheet('sheetRename');
+  exitSelectMode();
+  showToast('Yeniden adlandırıldı','ok');
+  render();
+}
+
+/* ---------- DELETE ---------- */
+function actionDelete(){
+  const items=[...state.selected];
+  if(items.length===0) return;
+  const folder = state.archiveStack.length ? currentArchiveFolder() : currentFolder();
+  items.forEach(node=>{
+    const idx = folder.children.indexOf(node);
+    if(idx>-1){
+      folder.children.splice(idx,1);
+      TRASH.unshift({node, parent: folder});
+    }
+  });
+  exitSelectMode();
+  showToast(`${items.length} öğe çöp kutusuna taşındı`,'ok');
+  render();
+}
+
+/* ---------- COMPRESS ---------- */
+let compressFmt='zip', compressPwOn=false;
+function actionCompress(){
+  const items=[...state.selected];
+  if(items.length===0){ showToast('En az bir öğe seç','warn'); return; }
+  document.getElementById('compressSub').textContent = `${items.length} öğe sıkıştırılacak`;
+  document.getElementById('archiveNameInput').value = items.length===1? items[0].name.replace(/\.[^.]+$/,'') : 'arsiv';
+  openSheet('sheetCompress');
+}
+function pickFmt(el,fmt){
+  document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  compressFmt=fmt;
+}
+function togglePwSwitch(){
+  compressPwOn=!compressPwOn;
+  document.getElementById('pwSwitch').classList.toggle('on',compressPwOn);
+  document.getElementById('pwField').style.display = compressPwOn?'block':'none';
+}
+function startCompress(){
+  const items=[...state.selected];
+  const name = document.getElementById('archiveNameInput').value.trim() || 'arsiv';
+  closeSheet('sheetCompress');
+  runProgress('compress', name+'.'+compressFmt, ()=>{
+    const totalSize = items.reduce((s,n)=>s+(n.type==='folder'?folderSize(n):n.size),0);
+    const archiveNode = F(name+'.'+compressFmt, Math.round(totalSize*0.55), 'şimdi', compressFmt, {
+      archive:true, locked:compressPwOn, children: items.map(deepClone)
+    });
+    const folder = state.archiveStack.length ? currentArchiveFolder() : currentFolder();
+    folder.children.push(archiveNode);
+    exitSelectMode();
+    showToast(`${archiveNode.name} oluşturuldu`,'ok');
+    render();
+  });
+}
+
+/* ---------- PROGRESS SIM ---------- */
+function runProgress(mode, label, onDone){
+  document.getElementById('progTitle').textContent = mode==='compress' ? 'Sıkıştırılıyor…' : 'Çıkartılıyor…';
+  document.getElementById('progIcon').innerHTML = mode==='compress' ? ICON.archiveIcn : ICON.extract;
+  document.getElementById('progFile').textContent = label;
+  const bar = document.getElementById('progBar');
+  const pct = document.getElementById('progPct');
+  bar.style.width='0%'; pct.textContent='%0';
+  openSheet('sheetProgress');
+  let p=0;
+  const iv = setInterval(()=>{
+    p += Math.random()*18+8;
+    if(p>=100){ p=100; clearInterval(iv);
+      bar.style.width='100%'; pct.textContent='%100';
+      setTimeout(()=>{ closeSheet('sheetProgress'); onDone(); }, 260);
+      return;
+    }
+    bar.style.width=p+'%'; pct.textContent='%'+Math.round(p);
+  }, 160);
+}
+
+/* ---------- FOLDER CREATE / UPLOAD SIM ---------- */
+function createFolder(){
+  const name = document.getElementById('newFolderInput').value.trim() || 'Yeni Klasör';
+  const folder = state.archiveStack.length ? currentArchiveFolder() : currentFolder();
+  folder.children.push(D(name,'şimdi',[]));
+  closeSheet('sheetNewFolder');
+  closeSheet('sheetFab');
+  showToast(`"${name}" klasörü oluşturuldu`,'ok');
+  render();
+}
+function simulateUpload(){
+  closeSheet('sheetFab');
+  runProgress('extract','belge_taslak.pdf', ()=>{
+    currentFolder().children.push(F('belge_taslak.pdf', 620000,'şimdi','pdf'));
+    showToast('Dosya yüklendi','ok');
+    render();
+  });
+}
+function simulateUploadImage(){
+  closeSheet('sheetFab');
+  runProgress('extract','yeni_fotograf.jpg', ()=>{
+    currentFolder().children.push(F('yeni_fotograf.jpg', 3100000,'şimdi','jpg'));
+    showToast('Fotoğraf eklendi','ok');
+    render();
+  });
+}
+
+/* ---------- COPY / MOVE PICKER ---------- */
+function openPicker(mode){
+  const items=[...state.selected];
+  if(items.length===0){ showToast('En az bir öğe seç','warn'); return; }
+  state.pickerAction = mode;
+  state.pickerPath = [FS];
+  document.getElementById('pickerTitle').textContent = mode==='copy' ? 'Kopyalanacak konumu seç' : 'Taşınacak konumu seç';
+  document.getElementById('pickerConfirmBtn').textContent = mode==='copy' ? 'Buraya kopyala' : 'Buraya taşı';
+  renderPicker();
+  openSheet('sheetPicker');
+}
+function renderPicker(){
+  const folder = state.pickerPath[state.pickerPath.length-1];
+  document.getElementById('pickerPath').textContent = state.pickerPath.map((p,i)=>i===0?'Depolama':p.name).join(' / ');
+  const subFolders = (folder.children||[]).filter(c=>c.type==='folder');
+  const list = document.getElementById('pickerList');
+  let html='';
+  if(state.pickerPath.length>1){
+    html += `<div class="menu-row" onclick="pickerUp()">${ICON.back}Geri</div>`;
+  }
+  if(subFolders.length===0){
+    html += `<div class="sub" style="padding:14px 0;">Alt klasör yok</div>`;
+  }
+  subFolders.forEach(f=>{
+    html += `<div class="menu-row" onclick="pickerInto(${nodeRef(f)})">${ICON.folder}${f.name}</div>`;
+  });
+  list.innerHTML = html;
+}
+function pickerInto(ref){ state.pickerPath.push(nodeFromRef(ref)); renderPicker(); }
+function pickerUp(){ state.pickerPath.pop(); renderPicker(); }
+function confirmPicker(){
+  const dest = state.pickerPath[state.pickerPath.length-1];
+  const items=[...state.selected];
+  const srcFolder = state.archiveStack.length ? currentArchiveFolder() : currentFolder();
+  items.forEach(node=>{
+    if(state.pickerAction==='copy'){
+      dest.children.push(deepClone(node));
+    } else {
+      const idx = srcFolder.children.indexOf(node);
+      if(idx>-1) srcFolder.children.splice(idx,1);
+      dest.children.push(node);
+    }
+  });
+  closeSheet('sheetPicker');
+  exitSelectMode();
+  showToast(state.pickerAction==='copy' ? `${items.length} öğe kopyalandı` : `${items.length} öğe taşındı`, 'ok');
+  render();
+}
+
+/* ---------- ROOT MODE (dogon-root-bridge.js içindeki DogonRootController tarafından yönetilir) ---------- */
+function toggleRoot(){
+  closeSheet('sheetMore');
+  if(window.DogonRootController){
+    window.DogonRootController.toggle();
+  } else {
+    // Köprü yüklenemediyse eski simülasyon davranışına düş
+    ROOT_MODE = !ROOT_MODE;
+    document.getElementById('rootMenuLabel').textContent = ROOT_MODE ? 'Kök Erişimini Kapat' : 'Kök Erişimini Etkinleştir';
+    if(ROOT_MODE){ showToast('Kök erişimi etkinleştirildi (simülasyon)','warn'); state.path=[ROOT_FS]; state.tab='files'; goTab('files'); }
+    else { showToast('Kök erişimi kapatıldı','ok'); state.path=[FS]; render(); }
+  }
+}
+
+/* ---------- TOAST ---------- */
+let toastTimer;
+function showToast(msg, kind){
+  const t=document.getElementById('toast');
+  t.innerHTML = `${kind==='warn'?`<svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>`:ICON.check} <span>${msg}</span>`;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+hydrateIcons();
+render();
+</script>
+<script src="dogon-root-bridge.js"></script>
+</body>
+</html>
