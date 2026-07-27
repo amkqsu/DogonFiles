@@ -35,7 +35,8 @@ if 'android:hardwareAccelerated' not in content:
     content = content.replace('<application', '<application\n        android:hardwareAccelerated="true"', 1)
 
 snippet = open('android-patch/AndroidManifest.snippet.xml', encoding='utf-8').read()
-snippet_body = '\n'.join(l for l in snippet.splitlines() if not l.strip().startswith('<!--') and '===' not in l and not l.strip().startswith('Bu blok') and not l.strip().startswith('Manuel'))
+# XML yorum bloklarını (<!-- ... -->) düzgün şekilde tamamen kaldır
+snippet_body = re.sub(r'<!--.*?-->', '', snippet, flags=re.DOTALL).strip()
 # application açılış tagının hemen sonrasına ekle
 content = re.sub(r'(<application[^>]*>)', r'\1\n' + snippet_body, content, count=1)
 
